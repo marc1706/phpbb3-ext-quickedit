@@ -1,0 +1,23 @@
+{
+	"name": "marc/quickedit",
+	"type": "phpbb-extension",
+	"description": "Adds quickediting capability to viewtopic.",
+	"homepage": "https://www.m-a-styes.de",
+	"version": "0.1.0-dev",
+	"time": "2014-04-14 13:31:01",
+	"license": "GPL-2.0",
+	"authors": [{
+			"name": "Marc Alexander",
+			"username": "Marc",
+			"email": "admin@m-a-styles.de",
+			"homepage": "http://www.m-a-styles.de",
+			"role": "Lead Developer"
+		}],
+	"require": {
+		"php": ">=5.3.3",
+		"phpbb/phpbb": "3.1.*@dev"
+	},
+	"extra": {
+		"display-name": "Quickedit"
+	}
+}

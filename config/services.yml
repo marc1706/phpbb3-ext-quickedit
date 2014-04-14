@@ -1,0 +1,11 @@
+services:
+    marc.quickedit.listener:
+        class: marc\quickedit\event\listener
+        arguments:
+            - @auth
+            - @config
+            - @request
+            - @template
+            - @user
+        tags:
+            - { name: event.listener }

@@ -145,7 +145,7 @@ class listener implements EventSubscriberInterface
 
 			if ($this->request->is_set_post('allow_quick_edit_enable'))
 			{
-				$cfg_array = (isset($_REQUEST['config'])) ? utf8_normalize_nfc(request_var('config', array('' => ''), true)) : '';
+				$cfg_array = ($this->request->is_set('config')) ? $this->request->variable('config', array('' => '')) : '';
 				if (isset($cfg_array['allow_quick_edit']))
 				{
 					$this->config->set('allow_quick_edit', (bool) $cfg_array['allow_quick_edit']);
@@ -174,7 +174,7 @@ class listener implements EventSubscriberInterface
 		$radio_ary = array(1 => 'YES', 0 => 'NO');
 
 		return h_radio('config[allow_quick_edit]', $radio_ary, $value) .
-			'<br /><br /><input class="button2" type="submit" id="' . $key . '_enable" name="' . $key . '_enable" value="' . $user->lang['ALLOW_QUICK_EDIT_BUTTON'] . '" />';
+			'<br /><br /><input class="button2" type="submit" id="' . $key . '_enable" name="' . $key . '_enable" value="' . $user->lang('ALLOW_QUICK_EDIT_BUTTON') . '" />';
 	}
 
 	/**
@@ -187,7 +187,7 @@ class listener implements EventSubscriberInterface
 	public function add_forums_request_data($event)
 	{
 		$forum_data = $event['forum_data'];
-		$forum_data += array('enable_quick_edit' => request_var('enable_quick_edit', false));
+		$forum_data += array('enable_quick_edit' => $this->request->variable('enable_quick_edit', false));
 		$event->offsetSet('forum_data', $forum_data);
 	}
 
@@ -201,7 +201,7 @@ class listener implements EventSubscriberInterface
 	public function initialise_forums_flag_data($event)
 	{
 		$forum_data = $event['forum_data'];
-		$forum_data['forum_flags'] += (request_var('enable_quick_edit', false)) ? self::QUICKEDIT_FLAG : 0;
+		$forum_data['forum_flags'] += ($this->request->variable('enable_quick_edit', false)) ? self::QUICKEDIT_FLAG : 0;
 		$event->offsetSet('forum_data', $forum_data);
 	}
 

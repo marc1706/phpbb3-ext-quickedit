@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "Adds quickediting capability to viewtopic.",
 	"homepage": "https://www.m-a-styes.de",
-	"version": "0.1.0-dev",
+	"version": "0.1.1-dev",
 	"time": "2014-04-14 13:31:01",
 	"license": "GPL-2.0",
 	"authors": [{

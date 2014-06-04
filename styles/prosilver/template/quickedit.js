@@ -91,7 +91,7 @@ $(document).ready(function() {
 		});
 
 		edit_buttons.each(function() {
-			var $this = $('#' + this.id + ' .edit-icon a'),
+			var $this = $('#' + this.id + ' a.edit-icon'),
 				fn;
 
 			fn = 'quickedit_post';

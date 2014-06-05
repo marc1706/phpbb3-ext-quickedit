@@ -13,7 +13,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 	if (typeof res.POST_ID !== 'undefined' && res.POST_ID > 0 && !$('#quickeditbox').length) {
 		$('#p' + res.POST_ID +' .content').hide();
 		$(res.MESSAGE).insertAfter('#p' + res.POST_ID +' .author');
-		var edit_link = $('#p' + res.POST_ID +' .edit-icon a');
+		var edit_link = $('#p' + res.POST_ID +' a.edit-icon');
 		var edit_buttons = $('div[id^="p"]').filter(function() {
 			return this.id.match(/^p+(?:([0-9]+))/);
 		});
@@ -30,7 +30,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 					return true;
 				}
 				var edit_button_id = '#' + this.id;
-				var edit_button = $(edit_button_id + ' .edit-icon a');
+				var edit_button = $(edit_button_id + ' a.edit-icon');
 
 				// Remove last click event. This should be the
 				// one we added
@@ -66,7 +66,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 				return true;
 			}
 			var edit_button_id = '#' + this.id;
-			var edit_button = $(edit_button_id + ' .edit-icon a');
+			var edit_button = $(edit_button_id + ' a.edit-icon');
 
 			edit_button.bind('click', function() {
 				$('#quickeditbox input[name="cancel"]').trigger('click');

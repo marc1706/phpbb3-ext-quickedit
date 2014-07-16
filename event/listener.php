@@ -117,12 +117,39 @@ class listener implements EventSubscriberInterface
 	{
 		$event['s_hidden_fields'] .= build_hidden_fields(array(
 			'attachment_data' 		=> $event['message_parser']->attachment_data,
-			'poll_vote_change'		=> (!empty($event['post_data']['poll_vote_change'])) ? ' checked="checked"' : '',
-			'poll_title'			=> (isset($event['post_data']['poll_title'])) ? $event['post_data']['poll_title'] : '',
-			'poll_option_text'		=> (!empty($event['post_data']['poll_options'])) ? implode("\n", $event['post_data']['poll_options']) : '',
-			'poll_max_options'		=> (isset($event['post_data']['poll_max_options'])) ? (int) $event['post_data']['poll_max_options'] : 1,
+			'poll_vote_change'		=> $this->not_empty_or_default($event['post_data']['poll_vote_change'], ' checked="checked"', ''),
+			'poll_title'			=> $this->isset_or_default($event['post_data']['poll_title'], ''),
+			'poll_option_text'		=> $this->not_empty_or_default($event['post_data']['poll_options'], implode("\n", $event['post_data']['poll_options']), ''),
+			'poll_max_options'		=> $this->isset_or_default((int) $event['post_data']['poll_max_options'], 1),
 			'poll_length'			=> $event['post_data']['poll_length'],
 		));
+	}
+
+	/**
+	* Returns value if it is set, otherwise the default
+	*
+	* @param mixed $value The variable to check
+	* @param mixed $default The default value to use if variable is not set
+	* @return mixed Value if variable is set, default value if not
+	* @access protected
+	*/
+	protected function isset_or_default($value, $default)
+	{
+		return (isset($value)) ? $value : $default;
+	}
+
+	/**
+	* Returns value if it's not empty, otherwise the default
+	*
+	* @param mixed $check_value The variable to check
+	* @param mixed $value The value if $check_value is not empty
+	* @param mixed $default The default value to use if variable is empty
+	* @return mixed Value if $check_value is not empty, default value if not
+	* @access protected
+	*/
+	protected function not_empty_or_default($check_value, $value, $default)
+	{
+		return (!empty($check_value)) ? $value : $default;
 	}
 
 	/**

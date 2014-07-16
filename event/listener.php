@@ -80,7 +80,7 @@ class listener implements EventSubscriberInterface
 	public function catch_ajax_requests($event)
 	{
 		// Parse page for quickedit window
-		if ($this->request->is_ajax() && !$event['submit'] && $event['mode'] == 'edit')
+		if ($this->is_catchable_request($event))
 		{
 			// Add hidden fields
 			$this->add_hidden_fields($event);
@@ -103,6 +103,18 @@ class listener implements EventSubscriberInterface
 				'MESSAGE'	=> $this->template->assign_display('body'),
 			));
 		}
+	}
+
+	/**
+	* Check if request is a catchable request
+	*
+	* @param object $event The event object
+	* @return bool True if it's a catchable request, false if not
+	* @access protected
+	*/
+	protected function is_catchable_request($event)
+	{
+		return $this->request->is_ajax() && !$event['submit'] && $event['mode'] == 'edit';
 	}
 
 	/**

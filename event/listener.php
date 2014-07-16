@@ -86,8 +86,6 @@ class listener implements EventSubscriberInterface
 			$this->add_hidden_fields($event);
 
 			// Update S_HIDDEN_FIELDS in page_data
-			// We're not able to directly modify the page data so
-			// we have to use array_merge() here.
 			$this->template->assign_vars(array_merge($event['page_data'], array('S_HIDDEN_FIELDS' => $event['s_hidden_fields'])));
 			$this->template->set_filenames(array(
 				'body'	=> 'quickedit_body.html'

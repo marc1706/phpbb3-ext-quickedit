@@ -167,15 +167,27 @@ class listener implements EventSubscriberInterface
 
 			if ($this->request->is_set_post('allow_quick_edit_enable'))
 			{
-				$cfg_array = ($this->request->is_set('config')) ? $this->request->variable('config', array('' => '')) : '';
-				if (isset($cfg_array['allow_quick_edit']))
-				{
-					$this->config->set('allow_quick_edit', (bool) $cfg_array['allow_quick_edit']);
-					\enable_bitfield_column_flag(FORUMS_TABLE, 'forum_flags', log(self::QUICKEDIT_FLAG, 2));
-				}
-				$event->offsetSet('submit', true);
+				$this->enable_quick_edit($event);
 			}
 		}
+	}
+
+	/**
+	* Enable quick edit
+	*
+	* @param object $event The event object
+	* @return null
+	* @access protected
+	*/
+	protected function enable_quick_edit($event)
+	{
+		$cfg_array = ($this->request->is_set('config')) ? $this->request->variable('config', array('' => '')) : '';
+		if (isset($cfg_array['allow_quick_edit']))
+		{
+			$this->config->set('allow_quick_edit', (bool) $cfg_array['allow_quick_edit']);
+			\enable_bitfield_column_flag(FORUMS_TABLE, 'forum_flags', log(self::QUICKEDIT_FLAG, 2));
+		}
+		$event->offsetSet('submit', true);
 	}
 
 	/**
@@ -300,7 +312,7 @@ class listener implements EventSubscriberInterface
 	{
 		// Check if quick edit is available
 		$s_quick_edit = 0;
-		if ($this->user->data['is_registered'] && $this->config['allow_quick_edit'] && ($event['topic_data']['forum_flags'] & self::QUICKEDIT_FLAG) && $this->auth->acl_get('f_reply', $event['forum_id']))
+		if ($this->user->data['is_registered'] && $this->config['allow_quick_edit'] && $this->check_forum_permissions($event))
 		{
 			// Quick edit enabled forum
 			$s_quick_edit = $this->check_topic_edit($event);
@@ -318,6 +330,25 @@ class listener implements EventSubscriberInterface
 	protected function check_topic_edit($event)
 	{
 		if (($event['topic_data']['forum_status'] == ITEM_UNLOCKED && $event['topic_data']['topic_status'] == ITEM_UNLOCKED) || $this->auth->acl_get('m_edit', $event['forum_id']))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	* Check forum_permissions and flag
+	*
+	* @param object $event The event object
+	* @return null
+	* @access protected
+	*/
+	protected function check_forum_permissions($event)
+	{
+		if (($event['topic_data']['forum_flags'] & self::QUICKEDIT_FLAG) && $this->auth->acl_get('f_reply', $event['forum_id']))
 		{
 			return true;
 		}

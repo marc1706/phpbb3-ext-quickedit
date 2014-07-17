@@ -21,10 +21,11 @@ class listener_test extends \phpbb_test_case
 		$this->config = new \phpbb\config\config(array());
 		$this->template = $this->getMock('\phpbb\template');
 		$this->request = new \phpbb_mock_request();
+		$this->helper = new \marc\quickedit\event\listener_helper($this->auth, $this->config, $this->request);
 
 		$this->listener = new \marc\quickedit\event\listener(
-			$this->auth,
 			$this->config,
+			$this->helper,
 			$this->request,
 			$this->template,
 			$this->user

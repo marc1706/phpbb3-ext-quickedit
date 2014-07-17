@@ -2,10 +2,17 @@ services:
     marc.quickedit.listener:
         class: marc\quickedit\event\listener
         arguments:
-            - @auth
             - @config
+            - @marc.quickedit.listener_helper
             - @request
             - @template
             - @user
         tags:
             - { name: event.listener }
+
+    marc.quickedit.listener_helper:
+        class: marc\quickedit\event\listener_helper
+        arguments:
+            - @auth
+            - @config
+            - @request

@@ -13,11 +13,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class listener implements EventSubscriberInterface
 {
-	/** @var \phpbb\auth\auth */
-	protected $auth;
-
 	/** @var \phpbb\config\config */
 	protected $config;
+
+	/** @var \marc\quickedit\event\listener_helper */
+	protected $helper;
 
 	/** @var \phpbb\request\request */
 	protected $request;
@@ -34,17 +34,17 @@ class listener implements EventSubscriberInterface
 	/**
 	* Constructor for listener
 	*
-	* @param \phpbb\auth\auth $auth phpBB auth
 	* @param \phpbb\config\config $config phpBB config
+	* @param \marc\quickedit\event\listener_helper $helper Listener helper
 	* @param \phpbb\request\request $request phpBB request
 	* @param \phpbb\template\twig\twig $template phpBB template
 	* @param \phpbb\user $user phpBB user
 	* @access public
 	*/
-	public function __construct($auth, $config, $request, $template, $user)
+	public function __construct($config, $helper, $request, $template, $user)
 	{
-		$this->auth = $auth;
 		$this->config = $config;
+		$this->helper = $helper;
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
@@ -80,10 +80,10 @@ class listener implements EventSubscriberInterface
 	public function catch_ajax_requests($event)
 	{
 		// Parse page for quickedit window
-		if ($this->is_catchable_request($event))
+		if ($this->helper->is_catchable_request($event))
 		{
 			// Add hidden fields
-			$this->add_hidden_fields($event);
+			$this->helper->add_hidden_fields($event);
 
 			// Update S_HIDDEN_FIELDS in page_data
 			$this->template->assign_vars(array_merge($event['page_data'], array('S_HIDDEN_FIELDS' => $event['s_hidden_fields'])));
@@ -104,65 +104,6 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Check if request is a catchable request
-	*
-	* @param object $event The event object
-	* @return bool True if it's a catchable request, false if not
-	* @access protected
-	*/
-	protected function is_catchable_request($event)
-	{
-		return $this->request->is_ajax() && !$event['submit'] && $event['mode'] == 'edit';
-	}
-
-	/**
-	* Add hidden fields in order to prevent dropping the needed values upon
-	* submission.
-	*
-	* @param object $event The event object
-	* @return null
-	* @access protected
-	*/
-	protected function add_hidden_fields(&$event)
-	{
-		$event['s_hidden_fields'] .= build_hidden_fields(array(
-			'attachment_data' 		=> $event['message_parser']->attachment_data,
-			'poll_vote_change'		=> $this->not_empty_or_default($event['post_data']['poll_vote_change'], ' checked="checked"', ''),
-			'poll_title'			=> $this->isset_or_default($event['post_data']['poll_title'], ''),
-			'poll_option_text'		=> $this->not_empty_or_default($event['post_data']['poll_options'], implode("\n", $event['post_data']['poll_options']), ''),
-			'poll_max_options'		=> $this->isset_or_default((int) $event['post_data']['poll_max_options'], 1),
-			'poll_length'			=> $event['post_data']['poll_length'],
-		));
-	}
-
-	/**
-	* Returns value if it is set, otherwise the default
-	*
-	* @param mixed $value The variable to check
-	* @param mixed $default The default value to use if variable is not set
-	* @return mixed Value if variable is set, default value if not
-	* @access protected
-	*/
-	protected function isset_or_default($value, $default)
-	{
-		return (isset($value)) ? $value : $default;
-	}
-
-	/**
-	* Returns value if it's not empty, otherwise the default
-	*
-	* @param mixed $check_value The variable to check
-	* @param mixed $value The value if $check_value is not empty
-	* @param mixed $default The default value to use if variable is empty
-	* @return mixed Value if $check_value is not empty, default value if not
-	* @access protected
-	*/
-	protected function not_empty_or_default($check_value, $value, $default)
-	{
-		return (!empty($check_value)) ? $value : $default;
-	}
-
-	/**
 	* Set ACP board settings
 	*
 	* @param object $event The event object
@@ -173,62 +114,13 @@ class listener implements EventSubscriberInterface
 	{
 		if ($event['mode'] == 'features')
 		{
-			$this->modify_acp_display_vars($event);
+			$this->helper->modify_acp_display_vars($event);
 
 			if ($this->request->is_set_post('allow_quick_edit_enable'))
 			{
-				$this->enable_quick_edit($event);
+				$this->helper->enable_quick_edit($event);
 			}
 		}
-	}
-
-	/**
-	* Enable quick edit
-	*
-	* @param object $event The event object
-	* @return null
-	* @access protected
-	*/
-	protected function enable_quick_edit($event)
-	{
-		$cfg_array = ($this->request->is_set('config')) ? $this->request->variable('config', array('' => '')) : '';
-		if (isset($cfg_array['allow_quick_edit']))
-		{
-			$this->config->set('allow_quick_edit', (bool) $cfg_array['allow_quick_edit']);
-			\enable_bitfield_column_flag(FORUMS_TABLE, 'forum_flags', log(self::QUICKEDIT_FLAG, 2));
-		}
-		$event->offsetSet('submit', true);
-	}
-
-	/**
-	* Add quickedit settings to acp settings by modifying the display vars
-	*
-	* @param object $event The event object
-	* @return null
-	* @access protected
-	*/
-	protected function modify_acp_display_vars($event)
-	{
-		$new_display_var = array(
-			'title'	=> $event['display_vars']['title'],
-			'vars'	=> array(),
-		);
-
-		foreach ($event['display_vars']['vars'] as $key => $content)
-		{
-			$new_display_var['vars'][$key] = $content;
-			if ($key == 'allow_quick_reply')
-			{
-				$new_display_var['vars']['allow_quick_edit'] = array(
-					'lang'		=> 'ALLOW_QUICK_EDIT',
-					'validate'	=> 'bool',
-					'type'		=> 'custom',
-					'function'	=> array('marc\quickedit\event\listener', 'quickedit_settings'),
-					'explain' 	=> true,
-				);
-			}
-		}
-		$event->offsetSet('display_vars', $new_display_var);
 	}
 
 	/**
@@ -322,49 +214,11 @@ class listener implements EventSubscriberInterface
 	{
 		// Check if quick edit is available
 		$s_quick_edit = 0;
-		if ($this->user->data['is_registered'] && $this->config['allow_quick_edit'] && $this->check_forum_permissions($event))
+		if ($this->user->data['is_registered'] && $this->config['allow_quick_edit'] && $this->helper->check_forum_permissions($event))
 		{
 			// Quick edit enabled forum
-			$s_quick_edit = $this->check_topic_edit($event);
+			$s_quick_edit = $this->helper->check_topic_edit($event);
 		}
 		$this->template->assign_var('S_QUICK_EDIT', $s_quick_edit);
-	}
-
-	/**
-	* Check whether user can edit in this topic and forum
-	*
-	* @param object $event The event object
-	* @return null
-	* @access protected
-	*/
-	protected function check_topic_edit($event)
-	{
-		if (($event['topic_data']['forum_status'] == ITEM_UNLOCKED && $event['topic_data']['topic_status'] == ITEM_UNLOCKED) || $this->auth->acl_get('m_edit', $event['forum_id']))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
-	* Check forum_permissions and flag
-	*
-	* @param object $event The event object
-	* @return null
-	* @access protected
-	*/
-	protected function check_forum_permissions($event)
-	{
-		if (($event['topic_data']['forum_flags'] & self::QUICKEDIT_FLAG) && $this->auth->acl_get('f_reply', $event['forum_id']))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 }

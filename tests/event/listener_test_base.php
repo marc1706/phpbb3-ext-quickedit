@@ -9,18 +9,48 @@
 
 namespace marc\quickedit\tests\event;
 
-class listener_test extends \phpbb_test_case
+class listener_test_base extends \phpbb_test_case
 {
 	/** @var \marc\quickedit\event\listener */
 	protected $listener;
+
+	static public $hidden_fields = array();
+
+	public function setup()
+	{
+		parent::setUp();
+
+		$this->setup_listener();
+	}
 
 	public function setup_listener()
 	{
 		$this->user = new \phpbb_mock_user();
 		$this->auth = new \phpbb\auth\auth();
 		$this->config = new \phpbb\config\config(array());
-		$this->template = $this->getMock('\phpbb\template');
-		$this->request = new \phpbb_mock_request();
+		$this->template = $this->getMock('\phpbb\template', array('assign_vars', 'set_filenames', 'set_style', 'assign_display'));
+		$this->template->expects($this->any())
+			->method('assign_vars')
+			->with($this->anything());
+		$this->template->expects($this->any())
+			->method('set_filenames')
+			->with($this->anything());
+		$this->template->expects($this->any())
+			->method('set_style')
+			->with($this->anything());
+		$this->template->expects($this->any())
+			->method('assign_display')
+			->with($this->anything())
+			->will($this->returnValue(''));
+		if (!isset($this->request))
+		{
+			$this->request = $this->getMock('\phpbb\request\request', array('is_ajax'));
+			$this->request->expects($this->any())
+				->method('is_ajax')
+				->with()
+				->will($this->returnValue(true));
+			$this->request->enable_super_globals();
+		}
 		$this->helper = new \marc\quickedit\event\listener_helper($this->auth, $this->config, $this->request);
 
 		$this->listener = new \marc\quickedit\event\listener(

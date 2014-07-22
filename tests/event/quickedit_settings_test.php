@@ -20,7 +20,7 @@ class quickedit_settings_test extends \marc\quickedit\tests\event\listener_test_
 			->will($this->returnValue('barfoo'));
 
 		$expected_result = 'foobar<br /><br /><input class="button2" type="submit" id="bar_enable" name="bar_enable" value="barfoo" />';
-		$this->assertEquals($expected_result, \marc\quickedit\event\listener::quickedit_settings('foo', 'bar'));
+		$this->assertEquals($expected_result, \marc\quickedit\event\listener::quickedit_settings(true, 'bar'));
 	}
 }
 
@@ -28,7 +28,7 @@ function h_radio($config_name, $radio_ary, $value)
 {
 	quickedit_settings_test::assertEquals($config_name, 'config[allow_quick_edit]');
 	quickedit_settings_test::assertEquals($radio_ary, array(1 => 'YES', 0 => 'NO'));
-	quickedit_settings_test::assertEquals($value, 'foo');
+	quickedit_settings_test::assertEquals($value, true);
 
 	return 'foobar';
 }

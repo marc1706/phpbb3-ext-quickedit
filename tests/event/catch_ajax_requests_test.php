@@ -62,12 +62,7 @@ class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test
 			$this->setExpectedTriggerError(E_WARNING);
 		}
 
-		$this->listener->catch_ajax_requests($event_data);
-
-		if ($error)
-		{
-			$this->assertEquals($event_data['s_hidden_fields'], $hidden_fields);
-		}
+		$this->assertNull($this->listener->catch_ajax_requests($event_data));
 	}
 }
 

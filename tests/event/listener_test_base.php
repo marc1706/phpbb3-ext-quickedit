@@ -25,10 +25,19 @@ class listener_test_base extends \phpbb_test_case
 
 	public function setup_listener()
 	{
-		$this->user = new \phpbb_mock_user();
-		$this->auth = new \phpbb\auth\auth();
-		$this->config = new \phpbb\config\config(array());
-		$this->template = $this->getMock('\phpbb\template', array('assign_vars', 'set_filenames', 'set_style', 'assign_display'));
+		if (!isset($this->user))
+		{
+			$this->user = new \phpbb_mock_user();
+		}
+		if (!isset($this->auth))
+		{
+			$this->auth = new \phpbb\auth\auth();
+		}
+		if (!isset($this->config))
+		{
+			$this->config = new \phpbb\config\config(array());
+		}
+		$this->template = $this->getMock('\phpbb\template', array('assign_vars', 'assign_var', 'set_filenames', 'set_style', 'assign_display'));
 		$this->template->expects($this->any())
 			->method('assign_vars')
 			->with($this->anything());
@@ -42,6 +51,7 @@ class listener_test_base extends \phpbb_test_case
 			->method('assign_display')
 			->with($this->anything())
 			->will($this->returnValue(''));
+
 		if (!isset($this->request))
 		{
 			$this->request = $this->getMock('\phpbb\request\request', array('is_ajax'));

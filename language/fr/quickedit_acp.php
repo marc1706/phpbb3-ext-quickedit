@@ -38,7 +38,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'ALLOW_QUICK_EDIT'		=> 'Autoriser la modification rapide',
 	'ALLOW_QUICK_EDIT_EXPLAIN'	=> 'Ce bouton permet de désactiver la modification rapide sur l’ensemble du forum. Si activé, les paramètres spécifiques du forum seront utilisés pour déterminer si la modification rapide est disponible dans les forums individuels.',
-	'ALLOW_QUICK_EDIT_BUTTON'	=> 'Submit and enable quick edit in all forums',
-	'ENABLE_QUICK_EDIT'		=> 'Activer l’édition rapide',
-	'ENABLE_QUICK_EDIT_EXPLAIN'	=> 'Active la modification rapide dans ce forum. Ce paramètre n’est pas pris en compte si la modification rapide est désactivé sur l’ensemble du forum. La modification rapide ne sera disponible que pour les utilisateurs qui ont la permission de modifier les messages dans ce forum.',
+	'ALLOW_QUICK_EDIT_BUTTON'	=> 'Valider et activer la modification rapide dans tous les forums',
+	'ENABLE_QUICK_EDIT'		=> 'Activer la modification rapide',
+	'ENABLE_QUICK_EDIT_EXPLAIN'	=> 'Active la modification rapide dans ce forum. Ce paramètre n’est pas pris en compte si la modification rapide est désactivée sur l’ensemble du forum. La modification rapide ne sera disponible que pour les utilisateurs qui ont la permission de modifier les messages dans ce forum.',
 ));

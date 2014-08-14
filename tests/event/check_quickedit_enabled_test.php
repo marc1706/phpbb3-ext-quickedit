@@ -13,7 +13,7 @@ class check_quickedit_enabled_test extends \marc\quickedit\tests\event\listener_
 	{
 		parent::setUp();
 
-		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'));
+		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'), array('\phpbb\datetime'));
 		$this->user->data = array(
 			'is_registered' => true,
 			'user_id'	=> 2,

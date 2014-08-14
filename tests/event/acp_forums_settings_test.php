@@ -13,7 +13,7 @@ class acp_forums_settings_test extends \marc\quickedit\tests\event\listener_test
 	{
 		parent::setUp();
 
-		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'));
+		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'), array('\phpbb\datetime'));
 		$this->setup_listener();
 	}
 

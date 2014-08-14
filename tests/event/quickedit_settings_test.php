@@ -13,7 +13,7 @@ class quickedit_settings_test extends \marc\quickedit\tests\event\listener_test_
 	{
 		global $user;
 
-		$user = $this->getMock('\phpbb\user', array('add_lang_ext', 'lang'));
+		$user = $this->getMock('\phpbb\user', array('add_lang_ext', 'lang'), array('\phpbb\datetime'));
 		$user->expects($this->any())
 			->method('lang')
 			->with()

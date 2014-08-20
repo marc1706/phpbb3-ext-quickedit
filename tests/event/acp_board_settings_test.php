@@ -66,6 +66,13 @@ class acp_board_settings_test extends \marc\quickedit\tests\event\listener_test_
 	}
 }
 
+/**
+* Mock of enable bitfield column flag
+*
+* @param string $table Table name
+* @param string $flag_type Flag type
+* @param double $flag Flag value
+*/
 function enable_bitfield_column_flag($table, $flag_type, $flag)
 {
 	acp_board_settings_test::assertEquals(FORUMS_TABLE, $table);

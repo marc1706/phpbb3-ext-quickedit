@@ -24,6 +24,15 @@ class quickedit_settings_test extends \marc\quickedit\tests\event\listener_test_
 	}
 }
 
+/**
+* Mock of h_radio function
+*
+* @param string $config_name Config name
+* @param array $radio_ary Array of radio values
+* @param mixed $value Value of field
+*
+* @return string Foobar string
+*/
 function h_radio($config_name, $radio_ary, $value)
 {
 	quickedit_settings_test::assertEquals($config_name, 'config[allow_quick_edit]');

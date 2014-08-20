@@ -128,7 +128,7 @@ class listener implements EventSubscriberInterface
 	*
 	* @param bool $value Value of quickedit settings. 1 if enabled, 0 if disabled
 	* @param string $key The key of the setting
-	* @return HTML for quickedit settings
+	* @return string HTML for quickedit settings
 	* @access public
 	*/
 	static public function quickedit_settings($value, $key)

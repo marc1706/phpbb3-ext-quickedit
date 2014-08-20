@@ -150,7 +150,7 @@ class listener_helper
 	* Check whether user can edit in this topic and forum
 	*
 	* @param object $event The event object
-	* @return null
+	* @return bool True if user can edit in this topic or forum, else false
 	* @access public
 	*/
 	public function check_topic_edit($event)
@@ -169,7 +169,8 @@ class listener_helper
 	* Check forum_permissions and flag
 	*
 	* @param object $event The event object
-	* @return null
+	* @return bool True if quickedit is enabled and user can reply in forum,
+	*		false if not
 	* @access public
 	*/
 	public function check_forum_permissions($event)

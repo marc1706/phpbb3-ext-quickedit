@@ -20,6 +20,11 @@
 		"display-name": "Quickedit",
 		"soft-require": {
 			"phpbb/phpbb": "3.1.*@dev"
+		},
+		"version-check": {
+			"host": "www.m-a-styles.de",
+			"directory": "/updatecheck",
+			"filename": "quickedit.json"
 		}
 	}
 }

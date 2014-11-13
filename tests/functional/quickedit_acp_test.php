@@ -86,4 +86,29 @@ class quickedit_acp_test extends \phpbb_functional_test_case
 		$this->assertArrayHasKey('enable_quick_edit', $form_values);
 		$this->assertEquals('1', $form_values['enable_quick_edit']);
 	}
+
+	public function test_delete_data()
+	{
+		$this->login();
+		$this->admin_login();
+		$this->add_lang('acp/extensions');
+
+		// Disable extension
+		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=disable_pre&ext_name=marc%2Fquickedit&sid=' . $this->sid);
+		$form = $crawler->selectButton('Disable')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('EXTENSION_DISABLE_SUCCESS', $crawler->text());
+
+		// Delete data
+		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=delete_data_pre&ext_name=marc%2Fquickedit&sid=' . $this->sid);
+		$form = $crawler->selectButton('Delete data')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('EXTENSION_DELETE_DATA_SUCCESS', $crawler->text());
+
+		// Enable again
+		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=enable_pre&ext_name=marc%2Fquickedit&sid=' . $this->sid);
+		$form = $crawler->selectButton('Enable')->form();
+		$crawler = self::submit($form);
+		$this->assertContainsLang('EXTENSION_ENABLE_SUCCESS', $crawler->text());
+	}
 }

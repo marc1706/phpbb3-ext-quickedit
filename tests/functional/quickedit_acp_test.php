@@ -92,22 +92,24 @@ class quickedit_acp_test extends \phpbb_functional_test_case
 		$this->admin_login();
 		$this->add_lang('acp/extensions');
 
-		// Disable extension
-		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=disable_pre&ext_name=marc%2Fquickedit&sid=' . $this->sid);
-		$form = $crawler->selectButton('Disable')->form();
-		$crawler = self::submit($form);
-		$this->assertContainsLang('EXTENSION_DISABLE_SUCCESS', $crawler->text());
+		$extension_steps = array(
+			array('disable_pre', 'Disable', 'EXTENSION_DISABLE_SUCCESS'),
+			array('delete_data_pre', 'Delete data', 'EXTENSION_DELETE_DATA_SUCCESS'),
+			array('enable_pre', 'Enable', 'EXTENSION_ENABLE_SUCCESS'),
+		);
 
-		// Delete data
-		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=delete_data_pre&ext_name=marc%2Fquickedit&sid=' . $this->sid);
-		$form = $crawler->selectButton('Delete data')->form();
-		$crawler = self::submit($form);
-		$this->assertContainsLang('EXTENSION_DELETE_DATA_SUCCESS', $crawler->text());
+		// Run each step
+		foreach ($extension_steps as $step)
+		{
+			$this->run_extension_step($step[0], $step[1], $step[2]);
+		}
+	}
 
-		// Enable again
-		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=enable_pre&ext_name=marc%2Fquickedit&sid=' . $this->sid);
-		$form = $crawler->selectButton('Enable')->form();
+	protected function run_extension_step($action, $button_text, $expected)
+	{
+		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=' . $action . '&ext_name=marc%2Fquickedit&sid=' . $this->sid);
+		$form = $crawler->selectButton($button_text)->form();
 		$crawler = self::submit($form);
-		$this->assertContainsLang('EXTENSION_ENABLE_SUCCESS', $crawler->text());
+		$this->assertContainsLang($expected, $crawler->text());
 	}
 }

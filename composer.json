@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "Adds quickediting capability to viewtopic.",
 	"homepage": "https://www.m-a-styles.de",
-	"version": "0.1.2-dev",
-	"time": "2014-07-22 19:27:01",
+	"version": "1.0.0-rc1",
+	"time": "2014-11-13 19:44:39",
 	"license": "GPL-2.0",
 	"authors": [{
 			"name": "Marc Alexander",
@@ -19,7 +19,7 @@
 	"extra": {
 		"display-name": "Quickedit",
 		"soft-require": {
-			"phpbb/phpbb": "3.1.*@dev"
+			"phpbb/phpbb": ">=3.1.0-RC2,<3.2.*@dev"
 		},
 		"version-check": {
 			"host": "www.m-a-styles.de",

@@ -32,15 +32,20 @@ class quickedit_acp_test extends \phpbb_functional_test_case
 		$this->add_lang_ext('marc/quickedit', array('quickedit_acp'));
 	}
 
-	public function test_quickedit_not_enabled()
+	protected function check_first_forum_settings($key, $value)
 	{
 		$this->login();
 		$this->admin_login();
 		$crawler = self::request('GET', 'adm/index.php?icat=6&mode=manage&parent_id=1&f=2&action=edit&sid=' . $this->sid);
 		$form = $crawler->selectButton('Submit')->form();
 		$form_values = $form->getValues();
-		$this->assertArrayHasKey('enable_quick_edit', $form_values);
-		$this->assertEquals('0', $form_values['enable_quick_edit']);
+		$this->assertArrayHasKey($key, $form_values);
+		$this->assertEquals($value, $form_values[$key]);
+	}
+
+	public function test_quickedit_not_enabled()
+	{
+		$this->check_first_forum_settings('enable_quick_edit', '0');
 	}
 
 	/**
@@ -78,13 +83,7 @@ class quickedit_acp_test extends \phpbb_functional_test_case
 	 */
 	public function test_quickedit_is_enabled()
 	{
-		$this->login();
-		$this->admin_login();
-		$crawler = self::request('GET', 'adm/index.php?icat=6&mode=manage&parent_id=1&f=2&action=edit&sid=' . $this->sid);
-		$form = $crawler->selectButton('Submit')->form();
-		$form_values = $form->getValues();
-		$this->assertArrayHasKey('enable_quick_edit', $form_values);
-		$this->assertEquals('1', $form_values['enable_quick_edit']);
+		$this->check_first_forum_settings('enable_quick_edit', '1');
 	}
 
 	public function test_delete_data()

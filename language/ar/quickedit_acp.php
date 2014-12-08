@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* Quickedit ACP [English]
+* Quickedit ACP [Arabic]
 *
 * @package Quickedit
 * @copyright (c) 2014 Marc Alexander ( www.m-a-styles.de )

@@ -20,7 +20,7 @@ class listener_helper
 	/** @var \phpbb\request\request */
 	protected $request;
 
-	/** @var quickedit forums flag */
+	/** @var int quickedit forums flag */
 	const QUICKEDIT_FLAG = 128;
 
 	/**

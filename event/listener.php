@@ -28,7 +28,7 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var quickedit forums flag */
+	/** @var int quickedit forums flag */
 	const QUICKEDIT_FLAG = 128;
 
 	/**

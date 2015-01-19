@@ -67,6 +67,7 @@ class listener_helper
 			'poll_option_text'		=> $this->not_empty_or_default($event['post_data']['poll_options'], implode("\n", $event['post_data']['poll_options']), ''),
 			'poll_max_options'		=> $this->isset_or_default((int) $event['post_data']['poll_max_options'], 1),
 			'poll_length'			=> $event['post_data']['poll_length'],
+			'attach_sig'			=> $event['post_data']['enable_sig'],
 		));
 	}
 

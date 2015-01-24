@@ -13,8 +13,14 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 	var $quickeditBox = $('#quickeditbox');
 
 	if (res.POST_ID !== 'undefined' && res.POST_ID > 0 && !$quickeditBox.length) {
-		$('#p' + res.POST_ID +' .content').hide();
-		$(res.MESSAGE).insertAfter('#p' + res.POST_ID +' .author');
+		var $post = $('#p' + res.POST_ID);
+
+		$post.find('.content').hide();
+		$(res.MESSAGE).insertAfter($post.find('.author'));
+
+		// Enable code editor for text area
+		phpbb.applyCodeEditor($post.find('textarea')[0]);
+
 		var edit_link = $('#p' + res.POST_ID +' a.edit-icon');
 		var edit_buttons = $('div[id^="p"]').filter(function() {
 			return this.id.match(/^p+(?:([0-9]+))/);
@@ -23,7 +29,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 		// Cancel button will show post again
 		$quickeditBox.find('input[name="cancel"]').click(function () {
 			$('#quickeditbox').remove();
-			$('#p' + res.POST_ID + ' .content').show();
+			$post.find('.content').show();
 
 			// Remove cancel event from all other quickedit buttons
 			edit_buttons.each(function() {

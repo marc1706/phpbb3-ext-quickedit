@@ -13,8 +13,7 @@
 			"role": "Lead Developer"
 		}],
 	"require": {
-		"php": ">=5.3.3",
-		"satooshi/php-coveralls": "dev-master"
+		"php": ">=5.3.3"
 	},
 	"extra": {
 		"display-name": "Quickedit",

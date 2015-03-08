@@ -25,6 +25,7 @@ class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test
 					'poll_max_options'	=> 0,
 					'poll_length'		=> 0,
 					'enable_sig'		=> 1,
+					'topic_status'		=> 0,
 				),
 				'page_data'	=> array(),
 				's_hidden_fields',
@@ -37,6 +38,7 @@ class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test
 				'poll_max_options'	=> 0,
 				'poll_length'		=> 0,
 				'attach_sig'		=> 1,
+				'topic_status'		=> 0,
 			)),
 			array(false, array(
 				'submit'	=> true,
@@ -47,6 +49,7 @@ class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test
 					'poll_max_options'	=> 0,
 					'poll_length'		=> 0,
 					'attach_sig'		=> 1,
+					'topic_status'		=> 1,
 				),
 				'page_data'	=> array(),
 			)),

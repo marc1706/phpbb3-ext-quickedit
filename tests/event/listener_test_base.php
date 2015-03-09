@@ -25,9 +25,13 @@ class listener_test_base extends \phpbb_test_case
 
 	public function setup_listener()
 	{
+		global $phpbb_extension_manager;
+
 		if (!isset($this->user))
 		{
-			$this->user = new \phpbb_mock_user();
+			$this->user = new \phpbb\user('\phpbb\datetime');
+			$this->user->data['user_lang'] = 'en';
+			$this->user->lang_name = 'en';
 		}
 		if (!isset($this->auth))
 		{
@@ -62,6 +66,15 @@ class listener_test_base extends \phpbb_test_case
 			$this->request->enable_super_globals();
 		}
 		$this->helper = new \marc\quickedit\event\listener_helper($this->auth, $this->config, $this->request);
+
+		$phpbb_extension_manager = $this->getMockBuilder('\phpbb\extensions\manager')
+			->disableOriginalConstructor()
+			->setMethods(array('get_extension_path'))
+			->getMock();
+		$phpbb_extension_manager->expects($this->any())
+			->method('get_extension_path')
+			->with($this->anything())
+			->will($this->returnValue('phpBB/ext/marc/quickedit/'));
 
 		$this->listener = new \marc\quickedit\event\listener(
 			$this->config,

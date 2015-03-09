@@ -116,6 +116,8 @@ class listener implements EventSubscriberInterface
 		{
 			$this->helper->modify_acp_display_vars($event);
 
+			$this->user->add_lang_ext('marc/quickedit', 'quickedit_acp');
+
 			if ($this->request->is_set_post('allow_quick_edit_enable'))
 			{
 				$this->helper->enable_quick_edit($event);

@@ -39,6 +39,7 @@ class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test
 				'poll_length'		=> 0,
 				'attach_sig'		=> 1,
 				'topic_status'		=> 0,
+				'lock_topic'		=> 0,
 			)),
 			array(false, array(
 				'submit'	=> true,

@@ -69,6 +69,7 @@ class listener_helper
 			'poll_length'			=> $event['post_data']['poll_length'],
 			'attach_sig'			=> $event['post_data']['enable_sig'],
 			'topic_status'			=> $event['post_data']['topic_status'],
+			'lock_topic'			=> $this->not_empty_or_default($event['post_data']['topic_status'], 1, 0),
 		));
 	}
 

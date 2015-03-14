@@ -61,6 +61,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 
 		// Edit button will redirect to full editor
 		edit_link.bind('click', function () {
+			var $quickeditBox = $('#quickeditbox');
 			if ($quickeditBox.find('input[name="preview"]') !== 'undefined') {
 				$quickeditBox.find('input[name="preview"]').click();
 			}
@@ -75,6 +76,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 			}
 			var edit_button_id = '#' + this.id;
 			var edit_button = $(edit_button_id + ' a.edit-icon');
+			var $quickeditBox = $('#quickeditbox');
 
 			edit_button.bind('click', function() {
 				$quickeditBox.find('input[name="cancel"]').trigger('click');

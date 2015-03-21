@@ -39,8 +39,32 @@ class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test
 				'poll_length'		=> 0,
 				'attach_sig'		=> 1,
 				'topic_status'		=> 0,
-				'lock_topic'		=> 0,
 			)),
+			array(true, array(
+				'submit'	=> false,
+				'mode'		=> 'edit',
+				'post_data'	=> array(
+					'poll_vote_change'	=> '',
+					'poll_options'		=> array(),
+					'poll_max_options'	=> 0,
+					'poll_length'		=> 0,
+					'enable_sig'		=> 1,
+					'topic_status'		=> 1,
+				),
+				'page_data'	=> array(),
+				's_hidden_fields',
+			),
+				array(
+					'attachment_data'	=> null,
+					'poll_vote_change'	=> '',
+					'poll_title'		=> '',
+					'poll_option_text'	=> '',
+					'poll_max_options'	=> 0,
+					'poll_length'		=> 0,
+					'attach_sig'		=> 1,
+					'topic_status'		=> 1,
+					'lock_topic'		=> true,
+				)),
 			array(false, array(
 				'submit'	=> true,
 				'mode'		=> 'edit',
@@ -70,11 +94,14 @@ class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test
 		}
 
 		$this->assertNull($this->listener->catch_ajax_requests($event_data));
+
+		$this->assertEquals(self::$hidden_fields, $hidden_fields);
 	}
 }
 
 function build_hidden_fields($hidden_fields)
 {
-	catch_ajax_requests_test::assertEquals(catch_ajax_requests_test::$hidden_fields, $hidden_fields);
+	catch_ajax_requests_test::$hidden_fields += $hidden_fields;
+
 	return $hidden_fields;
 }

@@ -91,26 +91,33 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 	}
 });
 
+/**
+ * Add Quickedit functionality to edit buttons
+ */
+phpbb.QuickeditAjaxifyEditButtons = function() {
+	var editButtons = $('div[id^="p"]').filter(function() {
+		return this.id.match(/^p+(?:([0-9]+))/);
+	});
+
+	editButtons.each(function() {
+		var $this = $('#' + this.id + ' a.edit-icon'),
+			fn;
+
+		fn = 'quickedit_post';
+		phpbb.ajaxify({
+			selector: $this,
+			refresh: false,
+			callback: fn
+		});
+	});
+};
+
 $(document).ready(function() {
 	var allowQuickeditDiv = $('div[data-allow-quickedit]');
 
 	if (allowQuickeditDiv !== 'undefined' && allowQuickeditDiv.attr('data-allow-quickedit') === '1')
 	{
-		var edit_buttons = $('div[id^="p"]').filter(function() {
-			return this.id.match(/^p+(?:([0-9]+))/);
-		});
-
-		edit_buttons.each(function() {
-			var $this = $('#' + this.id + ' a.edit-icon'),
-				fn;
-
-			fn = 'quickedit_post';
-			phpbb.ajaxify({
-				selector: $this,
-				refresh: false,
-				callback: fn
-			});
-		});
+		phpbb.QuickeditAjaxifyEditButtons();
 	}
 });
 

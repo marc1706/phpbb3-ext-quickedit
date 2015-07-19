@@ -85,12 +85,8 @@ class listener implements EventSubscriberInterface
 			// Update S_HIDDEN_FIELDS in page_data
 			$this->template->assign_vars(array_merge($event['page_data'], array('S_HIDDEN_FIELDS' => $event['s_hidden_fields'])));
 			$this->template->set_filenames(array(
-				'body'	=> 'quickedit_body.html'
+				'body'	=> '@marc_quickedit/quickedit_body.html'
 			));
-
-			// Make sure quickedit extension will be used for
-			// assign_display()
-			$this->template->set_style(array('styles', 'ext/marc/quickedit/styles/'));
 
 			$json = new \phpbb\json_response();
 			$json->send(array(
@@ -212,7 +208,7 @@ class listener implements EventSubscriberInterface
 	public function check_quickedit_enabled($event)
 	{
 		// Check if quick edit is available
-		$s_quick_edit = 0;
+		$s_quick_edit = false;
 		if ($this->user->data['is_registered'] && $this->config['allow_quick_edit'] && $this->helper->check_forum_permissions($event))
 		{
 			// Quick edit enabled forum

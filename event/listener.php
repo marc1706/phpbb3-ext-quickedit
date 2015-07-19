@@ -28,9 +28,6 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var int quickedit forums flag */
-	const QUICKEDIT_FLAG = 128;
-
 	/**
 	* Constructor for listener
 	*
@@ -170,7 +167,7 @@ class listener implements EventSubscriberInterface
 	public function initialise_forums_flag_data($event)
 	{
 		$forum_data = $event['forum_data'];
-		$forum_data['forum_flags'] += ($this->request->variable('enable_quick_edit', false)) ? self::QUICKEDIT_FLAG : 0;
+		$forum_data['forum_flags'] += ($this->request->variable('enable_quick_edit', false)) ? listener_helper::QUICKEDIT_FLAG : 0;
 		$event->offsetSet('forum_data', $forum_data);
 	}
 
@@ -186,7 +183,7 @@ class listener implements EventSubscriberInterface
 		$this->user->add_lang_ext('marc/quickedit', 'quickedit_acp');
 
 		$template_data = $event['template_data'];
-		$template_data['S_ENABLE_QUICK_EDIT'] = ($event['forum_data']['forum_flags'] & self::QUICKEDIT_FLAG) ? true : false;
+		$template_data['S_ENABLE_QUICK_EDIT'] = ($event['forum_data']['forum_flags'] & listener_helper::QUICKEDIT_FLAG) ? true : false;
 		$event->offsetSet('template_data', $template_data);
 	}
 
@@ -200,7 +197,7 @@ class listener implements EventSubscriberInterface
 	public function acp_forums_update_data($event)
 	{
 		$forum_data_sql = $event['forum_data_sql'];
-		$forum_data_sql['forum_flags'] += ($forum_data_sql['enable_quick_edit']) ? self::QUICKEDIT_FLAG : 0;
+		$forum_data_sql['forum_flags'] += ($forum_data_sql['enable_quick_edit']) ? listener_helper::QUICKEDIT_FLAG : 0;
 		unset($forum_data_sql['enable_quick_edit']);
 		$event->offsetSet('forum_data_sql', $forum_data_sql);
 	}

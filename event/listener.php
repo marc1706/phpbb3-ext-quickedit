@@ -34,11 +34,11 @@ class listener implements EventSubscriberInterface
 	* @param \phpbb\config\config $config phpBB config
 	* @param \marc\quickedit\event\listener_helper $helper Listener helper
 	* @param \phpbb\request\request $request phpBB request
-	* @param \phpbb\template\twig\twig $template phpBB template
+	* @param \phpbb\template\template $template phpBB template
 	* @param \phpbb\user $user phpBB user
 	* @access public
 	*/
-	public function __construct($config, $helper, $request, $template, $user)
+	public function __construct(\phpbb\config\config $config, \marc\quickedit\event\listener_helper $helper, \phpbb\request\request_interface $request, \phpbb\template\template $template, \phpbb\user $user)
 	{
 		$this->config = $config;
 		$this->helper = $helper;

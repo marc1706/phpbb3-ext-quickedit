@@ -28,20 +28,17 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\user */
 	protected $user;
 
-	/** @var int quickedit forums flag */
-	const QUICKEDIT_FLAG = 128;
-
 	/**
 	* Constructor for listener
 	*
 	* @param \phpbb\config\config $config phpBB config
 	* @param \marc\quickedit\event\listener_helper $helper Listener helper
 	* @param \phpbb\request\request $request phpBB request
-	* @param \phpbb\template\twig\twig $template phpBB template
+	* @param \phpbb\template\template $template phpBB template
 	* @param \phpbb\user $user phpBB user
 	* @access public
 	*/
-	public function __construct($config, $helper, $request, $template, $user)
+	public function __construct(\phpbb\config\config $config, \marc\quickedit\event\listener_helper $helper, \phpbb\request\request_interface $request, \phpbb\template\template $template, \phpbb\user $user)
 	{
 		$this->config = $config;
 		$this->helper = $helper;
@@ -88,12 +85,8 @@ class listener implements EventSubscriberInterface
 			// Update S_HIDDEN_FIELDS in page_data
 			$this->template->assign_vars(array_merge($event['page_data'], array('S_HIDDEN_FIELDS' => $event['s_hidden_fields'])));
 			$this->template->set_filenames(array(
-				'body'	=> 'quickedit_body.html'
+				'body'	=> '@marc_quickedit/quickedit_body.html'
 			));
-
-			// Make sure quickedit extension will be used for
-			// assign_display()
-			$this->template->set_style(array('styles', 'ext/marc/quickedit/styles/'));
 
 			$json = new \phpbb\json_response();
 			$json->send(array(
@@ -170,7 +163,7 @@ class listener implements EventSubscriberInterface
 	public function initialise_forums_flag_data($event)
 	{
 		$forum_data = $event['forum_data'];
-		$forum_data['forum_flags'] += ($this->request->variable('enable_quick_edit', false)) ? self::QUICKEDIT_FLAG : 0;
+		$forum_data['forum_flags'] += ($this->request->variable('enable_quick_edit', false)) ? listener_helper::QUICKEDIT_FLAG : 0;
 		$event->offsetSet('forum_data', $forum_data);
 	}
 
@@ -186,7 +179,7 @@ class listener implements EventSubscriberInterface
 		$this->user->add_lang_ext('marc/quickedit', 'quickedit_acp');
 
 		$template_data = $event['template_data'];
-		$template_data['S_ENABLE_QUICK_EDIT'] = ($event['forum_data']['forum_flags'] & self::QUICKEDIT_FLAG) ? true : false;
+		$template_data['S_ENABLE_QUICK_EDIT'] = ($event['forum_data']['forum_flags'] & listener_helper::QUICKEDIT_FLAG) ? true : false;
 		$event->offsetSet('template_data', $template_data);
 	}
 
@@ -200,7 +193,7 @@ class listener implements EventSubscriberInterface
 	public function acp_forums_update_data($event)
 	{
 		$forum_data_sql = $event['forum_data_sql'];
-		$forum_data_sql['forum_flags'] += ($forum_data_sql['enable_quick_edit']) ? self::QUICKEDIT_FLAG : 0;
+		$forum_data_sql['forum_flags'] += ($forum_data_sql['enable_quick_edit']) ? listener_helper::QUICKEDIT_FLAG : 0;
 		unset($forum_data_sql['enable_quick_edit']);
 		$event->offsetSet('forum_data_sql', $forum_data_sql);
 	}
@@ -215,7 +208,7 @@ class listener implements EventSubscriberInterface
 	public function check_quickedit_enabled($event)
 	{
 		// Check if quick edit is available
-		$s_quick_edit = 0;
+		$s_quick_edit = false;
 		if ($this->user->data['is_registered'] && $this->config['allow_quick_edit'] && $this->helper->check_forum_permissions($event))
 		{
 			// Quick edit enabled forum

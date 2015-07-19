@@ -41,7 +41,9 @@ class listener_test_base extends \phpbb_test_case
 		{
 			$this->config = new \phpbb\config\config(array());
 		}
-		$this->template = $this->getMock('\phpbb\template', array('assign_vars', 'assign_var', 'set_filenames', 'set_style', 'assign_display'));
+		$this->template = $this->getMockBuilder('\phpbb\template\template')
+			->disableOriginalConstructor()
+			->getMock();
 		$this->template->expects($this->any())
 			->method('assign_vars')
 			->with($this->anything());

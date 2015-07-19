@@ -31,7 +31,7 @@ class listener_helper
 	* @param \phpbb\request\request $request phpBB request
 	* @access public
 	*/
-	public function __construct($auth, $config, $request)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\request\request_interface $request)
 	{
 		$this->auth = $auth;
 		$this->config = $config;

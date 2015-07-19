@@ -1,9 +1,11 @@
 (function($) {  // Avoid conflicts with other libraries
 
+/* global phpbb, jQuery */
+
 "use strict";
 
 // Holds the standard edit button click event during quickedit
-phpbb.edit_button_event = [];
+phpbb.editButtonEvent = [];
 
 /**
  * This callback displays the quickedit area in place of the post that is being
@@ -12,7 +14,7 @@ phpbb.edit_button_event = [];
 phpbb.addAjaxCallback('quickedit_post', function(res) {
 	var $quickeditBox = $('#quickeditbox');
 
-	if (res.POST_ID !== 'undefined' && res.POST_ID > 0 && !$quickeditBox.length) {
+	if (res.POST_ID && res.POST_ID > 0 && !$quickeditBox.length) {
 		var $post = $('#p' + res.POST_ID);
 
 		$post.find('.content').hide();
@@ -21,8 +23,8 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 		// Enable code editor for text area
 		phpbb.applyCodeEditor($post.find('textarea')[0]);
 
-		var edit_link = $('#p' + res.POST_ID +' a.edit-icon');
-		var edit_buttons = $('div[id^="p"]').filter(function() {
+		var editLink = $('#p' + res.POST_ID +' a.edit-icon');
+		var editButtons = $('div[id^="p"]').filter(function() {
 			return this.id.match(/^p+(?:([0-9]+))/);
 		});
 
@@ -32,35 +34,35 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 			$post.find('.content').show();
 
 			// Remove cancel event from all other quickedit buttons
-			edit_buttons.each(function() {
+			editButtons.each(function() {
 				// Only other edit buttons will trigger cancel
 				if (this.id === 'p' + res.POST_ID) {
 					return true;
 				}
-				var edit_button_id = '#' + this.id;
-				var edit_button = $(edit_button_id + ' a.edit-icon');
+				var editButtonId = '#' + this.id;
+				var editButton = $(editButtonId + ' a.edit-icon');
 
 				// Remove last click event. This should be the
 				// one we added
-				edit_button.each(function() {
-					var event_handlers = $._data(this, 'events').click;
-					event_handlers.pop();
+				editButton.each(function() {
+					var eventHandlers = $._data(this, 'events').click;
+					eventHandlers.pop();
 				});
 			});
 
 			// Add edit button click event for quickedit back
-			edit_link.each(function() {
-				var event_handlers = $._data(this, 'events').click;
-				event_handlers.splice(0, 0, phpbb.edit_button_event);
+			editLink.each(function() {
+				var eventHandlers = $._data(this, 'events').click;
+				eventHandlers.splice(0, 0, phpbb.editButtonEvent);
 				// Remove full editor click event
-				event_handlers.pop();
+				eventHandlers.pop();
 			});
-			phpbb.edit_button_event = [];
+			phpbb.editButtonEvent = [];
 			return false;
 		});
 
 		// Edit button will redirect to full editor
-		edit_link.bind('click', function () {
+		editLink.bind('click', function () {
 			var $quickeditBox = $('#quickeditbox');
 			if ($quickeditBox.find('input[name="preview"]') !== 'undefined') {
 				$quickeditBox.find('input[name="preview"]').click();
@@ -69,24 +71,24 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 		});
 
 		// Clicking a different edit button will cancel the initial quickedit
-		edit_buttons.each(function() {
+		editButtons.each(function() {
 			// Only the other edit buttons will trigger a cancel
 			if (this.id === 'p' + res.POST_ID) {
 				return true;
 			}
-			var edit_button_id = '#' + this.id;
-			var edit_button = $(edit_button_id + ' a.edit-icon');
+			var editButtonId = '#' + this.id;
+			var editButton = $(editButtonId + ' a.edit-icon');
 			var $quickeditBox = $('#quickeditbox');
 
-			edit_button.bind('click', function() {
+			editButton.bind('click', function() {
 				$quickeditBox.find('input[name="cancel"]').trigger('click');
 			});
 		});
 
 		// Remove edit button click event for quickedit
-		edit_link.each(function() {
-			var event_handlers = $._data(this, 'events').click;
-			phpbb.edit_button_event = event_handlers.shift();
+		editLink.each(function() {
+			var eventHandlers = $._data(this, 'events').click;
+			phpbb.editButtonEvent = eventHandlers.shift();
 		});
 	}
 });

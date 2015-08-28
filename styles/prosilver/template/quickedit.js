@@ -12,13 +12,16 @@ phpbb.editButtonEvent = [];
  * edited. It will also ajaxify the cancel button.
  */
 phpbb.addAjaxCallback('quickedit_post', function(res) {
-	var $quickeditBox = $('#quickeditbox');
+	var quickeditBoxId = '#quickeditbox';
 
-	if (res.POST_ID && res.POST_ID > 0 && !$quickeditBox.length) {
+	if (res.POST_ID && res.POST_ID > 0 && !$(quickeditBoxId).length) {
 		var $post = $('#p' + res.POST_ID);
 
 		$post.find('.content').hide();
 		$(res.MESSAGE).insertAfter($post.find('.author'));
+
+		// Now we can initialize this variable
+		var $quickeditBox = $(quickeditBoxId);
 
 		// Enable code editor for text area
 		phpbb.applyCodeEditor($post.find('textarea')[0]);
@@ -29,7 +32,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 		});
 
 		// Cancel button will show post again
-		$quickeditBox.find('input[name="cancel"]').click(function () {
+		$quickeditBox.find('input[name="cancel"]').click(function() {
 			$('#quickeditbox').remove();
 			$post.find('.content').show();
 
@@ -62,7 +65,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 		});
 
 		// Edit button will redirect to full editor
-		editLink.bind('click', function () {
+		editLink.bind('click', function() {
 			var $quickeditBox = $('#quickeditbox');
 			if ($quickeditBox.find('input[name="preview"]') !== 'undefined') {
 				$quickeditBox.find('input[name="preview"]').click();
@@ -96,8 +99,8 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 /**
  * Add Quickedit functionality to edit buttons
  */
-phpbb.QuickeditAjaxifyEditButtons = function() {
-	var editButtons = $('div[id^="p"]').filter(function() {
+phpbb.QuickeditAjaxifyEditButtons = function(elements) {
+	var editButtons = elements.find('div[id^="p"]').filter(function() {
 		return this.id.match(/^p+(?:([0-9]+))/);
 	});
 
@@ -111,15 +114,35 @@ phpbb.QuickeditAjaxifyEditButtons = function() {
 			refresh: false,
 			callback: fn
 		});
+
+		// Close dropdown in responsive design
+		$this.filter(function() {
+			return !!$(this).closest('.responsive-menu').length;
+		}).click(function() {
+			var $container = $(this).parents('.dropdown-container'),
+				$trigger = $container.find('.dropdown-trigger:first'),
+				data;
+
+			if (!$trigger.length) {
+				data = $container.attr('data-dropdown-trigger');
+				$trigger = data ? $container.children(data) : $container.children('a:first');
+			}
+			$trigger.click();
+		});
 	});
 };
 
-$(document).ready(function() {
+$(window).on('load', function() {
 	var allowQuickeditDiv = $('div[data-allow-quickedit]');
 
 	if (allowQuickeditDiv !== 'undefined' && allowQuickeditDiv.attr('data-allow-quickedit') === '1')
 	{
-		phpbb.QuickeditAjaxifyEditButtons();
+		phpbb.QuickeditAjaxifyEditButtons($(document));
+
+		// Compatibility with QuickReply Reloaded extension
+		$('#qr_posts').on('qr_completed', function(e, elements) {
+			phpbb.QuickeditAjaxifyEditButtons(elements);
+		});
 	}
 });
 

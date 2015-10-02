@@ -77,6 +77,9 @@ class listener_helper
 				'lock_topic'			=> true,
 			));
 		}
+
+		// Add hidden fields for kinerity/topicdescriptions
+		$this->add_hidden_if_exists($event['s_hidden_fields'], $event['post_data'], 'topic_desc');
 	}
 
 	/**
@@ -192,5 +195,26 @@ class listener_helper
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Add data to hidden fields if column exists in post_data array
+	 *
+	 * @param string $hidden_fields Hidden fields data
+	 * @param array $data_array post_data array
+	 * @param string $column Column name
+	 *
+	 * @return string Hidden fields data
+	 */
+	protected function add_hidden_if_exists($hidden_fields, $data_array, $column)
+	{
+		if (isset($data_array[$column]))
+		{
+			$hidden_fields .= build_hidden_fields(array(
+				$column		=> $data_array[$column],
+			));
+		}
+
+		return $hidden_fields;
 	}
 }

@@ -50,6 +50,7 @@ class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test
 					'poll_length'		=> 0,
 					'enable_sig'		=> 1,
 					'topic_status'		=> 1,
+					'topic_desc'		=> 'foo',
 				),
 				'page_data'	=> array(),
 				's_hidden_fields',

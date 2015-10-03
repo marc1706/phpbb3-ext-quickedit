@@ -79,7 +79,7 @@ class listener_helper
 		}
 
 		// Add hidden fields for kinerity/topicdescriptions
-		$this->add_hidden_if_exists($event['s_hidden_fields'], $event['post_data'], 'topic_desc');
+		$event['s_hidden_fields'] = $this->add_hidden_if_exists($event['s_hidden_fields'], $event['post_data'], 'topic_desc');
 	}
 
 	/**

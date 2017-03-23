@@ -26,7 +26,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 		// Enable code editor for text area
 		phpbb.applyCodeEditor($post.find('textarea')[0]);
 
-		var editLink = $('#p' + res.POST_ID +' a.edit-icon');
+		var editLink = $('#p' + res.POST_ID +" a[href*='mode=edit']");
 		var editButtons = $('div[id^="p"]').filter(function() {
 			return this.id.match(/^p+(?:([0-9]+))/);
 		});
@@ -43,7 +43,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 					return true;
 				}
 				var editButtonId = '#' + this.id;
-				var editButton = $(editButtonId + ' a.edit-icon');
+				var editButton = $(editButtonId + " a[href*='mode=edit']");
 
 				// Remove last click event. This should be the
 				// one we added
@@ -80,7 +80,7 @@ phpbb.addAjaxCallback('quickedit_post', function(res) {
 				return true;
 			}
 			var editButtonId = '#' + this.id;
-			var editButton = $(editButtonId + ' a.edit-icon');
+			var editButton = $(editButtonId + " a[href*='mode=edit']");
 			var $quickeditBox = $('#quickeditbox');
 
 			editButton.bind('click', function() {
@@ -105,7 +105,7 @@ phpbb.QuickeditAjaxifyEditButtons = function(elements) {
 	});
 
 	editButtons.each(function() {
-		var $this = $('#' + this.id + ' a.edit-icon'),
+		var $this = $('#' + this.id + " a[href*='mode=edit']"),
 			fn;
 
 		fn = 'quickedit_post';

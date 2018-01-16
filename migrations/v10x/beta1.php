@@ -56,6 +56,7 @@ class beta1 extends \phpbb\db\migration\migration
 	public function revert_data()
 	{
 		return array(
+			array('config.remove', array('allow_quick_edit')),
 			array('custom', array(array($this, 'revert_forum_flags'))),
 		);
 	}

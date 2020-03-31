@@ -71,6 +71,7 @@ class listener_helper
 			'poll_length'			=> $event['post_data']['poll_length'],
 			'attach_sig'			=> $event['post_data']['enable_sig'],
 			'topic_status'			=> $event['post_data']['topic_status'],
+			'lock_post'				=> $event['post_data']['lock_post'],
 		));
 
 		if (!empty($event['post_data']['topic_status']))

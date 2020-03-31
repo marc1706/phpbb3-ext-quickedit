@@ -28,23 +28,28 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\user */
 	protected $user;
 
+	/* @var \phpbb\language\language */
+	protected $language;
+
 	/**
 	* Constructor for listener
 	*
-	* @param \phpbb\config\config $config phpBB config
-	* @param \marc\quickedit\event\listener_helper $helper Listener helper
-	* @param \phpbb\request\request $request phpBB request
-	* @param \phpbb\template\template $template phpBB template
-	* @param \phpbb\user $user phpBB user
+	* @param \phpbb\config\config 						$config phpBB config
+	* @param \marc\quickedit\event\listener_helper 		$helper Listener helper
+	* @param \phpbb\request\request 					$request phpBB request
+	* @param \phpbb\template\template 					$template phpBB template
+	* @param \phpbb\user 								$user phpBB user
+	* @param \phpbb\language\language					$language
 	* @access public
 	*/
-	public function __construct(\phpbb\config\config $config, \marc\quickedit\event\listener_helper $helper, \phpbb\request\request_interface $request, \phpbb\template\template $template, \phpbb\user $user)
+	public function __construct(\phpbb\config\config $config, \marc\quickedit\event\listener_helper $helper, \phpbb\request\request_interface $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\language\language $language)
 	{
 		$this->config = $config;
 		$this->helper = $helper;
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
+		$this->language = $language;
 	}
 
 	/**
@@ -109,7 +114,7 @@ class listener implements EventSubscriberInterface
 		{
 			$this->helper->modify_acp_display_vars($event);
 
-			$this->user->add_lang_ext('marc/quickedit', 'quickedit_acp');
+			$this->language->add_lang('quickedit_acp', 'marc/quickedit');
 
 			if ($this->request->is_set_post('allow_quick_edit_enable'))
 			{
@@ -131,12 +136,12 @@ class listener implements EventSubscriberInterface
 		// Called statically so can't use $this->user
 		global $user;
 
-		$user->add_lang_ext('marc/quickedit', 'quickedit_acp');
+		$this->language->add_lang('quickedit_acp', 'marc/quickedit');
 
 		$radio_ary = array(1 => 'YES', 0 => 'NO');
 
 		return h_radio('config[allow_quick_edit]', $radio_ary, $value) .
-			'<br /><br /><input class="button2" type="submit" id="' . $key . '_enable" name="' . $key . '_enable" value="' . $user->lang('ALLOW_QUICK_EDIT_BUTTON') . '" />';
+			'<br /><br /><input class="button2" type="submit" id="' . $key . '_enable" name="' . $key . '_enable" value="' . $this->language->lang('ALLOW_QUICK_EDIT_BUTTON') . '" />';
 	}
 
 	/**
@@ -176,7 +181,7 @@ class listener implements EventSubscriberInterface
 	*/
 	public function acp_forums_settings($event)
 	{
-		$this->user->add_lang_ext('marc/quickedit', 'quickedit_acp');
+		$this->language->add_lang('quickedit_acp', 'marc/quickedit');
 
 		$template_data = $event['template_data'];
 		$template_data['S_ENABLE_QUICK_EDIT'] = ($event['forum_data']['forum_flags'] & listener_helper::QUICKEDIT_FLAG) ? true : false;

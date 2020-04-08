@@ -7,6 +7,7 @@ services:
             - '@request'
             - '@template'
             - '@user'
+            - '@language'
         tags:
             - {name: event.listener}
     marc.quickedit.listener_helper:

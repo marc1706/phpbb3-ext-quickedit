@@ -133,15 +133,15 @@ class listener implements EventSubscriberInterface
 	*/
 	static public function quickedit_settings($value, $key)
 	{
-		// Called statically so can't use $this->user
-		global $user;
+		// Called statically so can't use $this->language
+		global $language;
 
-		$this->language->add_lang('quickedit_acp', 'marc/quickedit');
+		$language->add_lang('quickedit_acp', 'marc/quickedit');
 
 		$radio_ary = array(1 => 'YES', 0 => 'NO');
 
 		return h_radio('config[allow_quick_edit]', $radio_ary, $value) .
-			'<br /><br /><input class="button2" type="submit" id="' . $key . '_enable" name="' . $key . '_enable" value="' . $this->language->lang('ALLOW_QUICK_EDIT_BUTTON') . '" />';
+			'<br /><br /><input class="button2" type="submit" id="' . $key . '_enable" name="' . $key . '_enable" value="' . $language->lang('ALLOW_QUICK_EDIT_BUTTON') . '" />';
 	}
 
 	/**

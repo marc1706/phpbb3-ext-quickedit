@@ -9,9 +9,19 @@
 
 namespace marc\quickedit\tests\event;
 
+use marc\quickedit\event\listener;
+use phpbb\language\language;
+use phpbb\user;
+
 class listener_test_base extends \phpbb_test_case
 {
-	/** @var \marc\quickedit\event\listener */
+	/** @var language */
+	protected $language;
+
+	/** @var user */
+	protected $user;
+
+	/** @var listener */
 	protected $listener;
 
 	static public $hidden_fields = array();
@@ -25,11 +35,12 @@ class listener_test_base extends \phpbb_test_case
 
 	public function setup_listener()
 	{
-		global $phpbb_extension_manager;
+		global $phpbb_root_path, $phpEx, $phpbb_extension_manager;
 
 		if (!isset($this->user))
 		{
-			$this->user = new \phpbb\user('\phpbb\datetime');
+			$this->language = new language(new \phpbb\language\language_file_loader($phpbb_root_path, $phpEx));
+			$this->user = new user($this->language, '\phpbb\datetime');
 			$this->user->data['user_lang'] = 'en';
 			$this->user->lang_name = 'en';
 		}
@@ -78,12 +89,13 @@ class listener_test_base extends \phpbb_test_case
 			->with($this->anything())
 			->will($this->returnValue('phpBB/ext/marc/quickedit/'));
 
-		$this->listener = new \marc\quickedit\event\listener(
+		$this->listener = new listener(
 			$this->config,
 			$this->helper,
 			$this->request,
 			$this->template,
-			$this->user
+			$this->user,
+			$this->language
 		);
 	}
 
@@ -103,6 +115,6 @@ class listener_test_base extends \phpbb_test_case
 			'core.acp_manage_forums_display_form',
 			'core.acp_manage_forums_update_data_before',
 			'core.viewtopic_modify_page_title',
-		), array_keys(\marc\quickedit\event\listener::getSubscribedEvents()));
+		), array_keys(listener::getSubscribedEvents()));
 	}
 }

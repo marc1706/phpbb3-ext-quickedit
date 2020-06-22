@@ -1,4 +1,8 @@
 <?php
+
+use phpbb\language\language;
+use phpbb\language\language_file_loader;
+
 /**
 *
 * @package Quickedit
@@ -11,9 +15,12 @@ class acp_forums_settings_test extends \marc\quickedit\tests\event\listener_test
 {
 	public function setUp()
 	{
+		global $phpbb_root_path, $phpEx;
+
 		parent::setUp();
 
-		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'), array('\phpbb\datetime'));
+		$this->language = new language(new language_file_loader($phpbb_root_path, $phpEx));
+		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'), array($this->language, '\phpbb\datetime'));
 		$this->setup_listener();
 	}
 

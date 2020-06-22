@@ -1,4 +1,8 @@
 <?php
+
+use phpbb\language\language;
+use phpbb\language\language_file_loader;
+
 /**
 *
 * @package Quickedit
@@ -11,9 +15,12 @@ class check_quickedit_enabled_test extends \marc\quickedit\tests\event\listener_
 {
 	public function setUp()
 	{
+		global $phpbb_root_path, $phpEx;
+
 		parent::setUp();
 
-		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'), array('\phpbb\datetime'));
+		$this->language = new language(new language_file_loader($phpbb_root_path, $phpEx));
+		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'), array($this->language, '\phpbb\datetime'));
 		$this->user->data = array(
 			'is_registered' => true,
 			'user_id'	=> 2,
@@ -23,7 +30,7 @@ class check_quickedit_enabled_test extends \marc\quickedit\tests\event\listener_
 			->method('acl_get')
 			->with($this->anything())
 			->will($this->returnValue(true));
-		
+
 		$this->template->expects($this->any())
 			->method('assign_var')
 			->with('S_QUICK_EDIT');

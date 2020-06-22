@@ -1,4 +1,7 @@
 <?php
+
+use phpbb\language\language_file_loader;
+
 /**
 *
 * @package Quickedit
@@ -11,10 +14,10 @@ class quickedit_settings_test extends \marc\quickedit\tests\event\listener_test_
 {
 	public function test_acp_board_settings()
 	{
-		global $user;
+		global $phpbb_root_path, $phpEx, $language;
 
-		$user = $this->getMock('\phpbb\user', array('add_lang_ext', 'lang'), array('\phpbb\datetime'));
-		$user->expects($this->any())
+		$language = $this->getMock('\phpbb\language\language', array('add_lang_ext', 'lang'), array(new language_file_loader($phpbb_root_path, $phpEx)));
+		$language->expects($this->any())
 			->method('lang')
 			->with()
 			->will($this->returnValue('barfoo'));

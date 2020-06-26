@@ -70,8 +70,12 @@ class listener_helper
 			'poll_max_options'		=> $this->isset_or_default((int) $event['post_data']['poll_max_options'], 1),
 			'poll_length'			=> $event['post_data']['poll_length'],
 			'topic_status'			=> $event['post_data']['topic_status'],
-			'lock_post'				=> $event['post_data']['post_edit_locked'],
 		];
+
+		if (!empty($event['post_data']['post_edit_locked']))
+		{
+			$hidden_fields['lock_post'] = $event['post_data']['post_edit_locked'];
+		}
 
 		if (!empty($event['post_data']['enable_sig']))
 		{

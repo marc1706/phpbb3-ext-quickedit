@@ -4,7 +4,7 @@
 * Quickedit ACP [Français]
 *
 * @package Quickedit
-* @copyright (c) 2014 Marc Alexander ( www.m-a-styles.de )
+* @copyright (c) 2015 - 2021 Marc Alexander ( www.m-a-styles.de )
 * @translation by Georges.L (geolim4.com)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *

@@ -4,7 +4,7 @@
 * Quickedit ACP [Arabic]
 *
 * @package Quickedit
-* @copyright (c) 2014 Marc Alexander ( www.m-a-styles.de )
+* @copyright (c) 2015 - 2021 Marc Alexander ( www.m-a-styles.de )
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 * Translated by Basil Taha Alhitary - www.alhitary.net

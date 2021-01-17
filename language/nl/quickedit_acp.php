@@ -4,7 +4,7 @@
 * Quickedit ACP [Dutch]
 *
 * @package Quickedit
-* @copyright (c) 2014 Marc Alexander ( www.m-a-styles.de ), Rotsblok
+* @copyright (c) 2015 - 2021 Marc Alexander ( www.m-a-styles.de ), Rotsblok
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */

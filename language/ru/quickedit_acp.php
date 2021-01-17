@@ -4,7 +4,7 @@
 * Quickedit ACP [Russian]
 *
 * @package Quickedit
-* @copyright (c) 2014 Marc Alexander ( www.m-a-styles.de )
+* @copyright (c) 2015 - 2021 Marc Alexander ( www.m-a-styles.de )
 * @translated by LavIgor (https://github.com/LavIgor)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *

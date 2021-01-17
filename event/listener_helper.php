@@ -102,7 +102,7 @@ class listener_helper
 	*/
 	protected function isset_or_default($value, $default)
 	{
-		return (isset($value)) ? $value : $default;
+		return $value ?? $default;
 	}
 
 	/**

@@ -62,23 +62,32 @@ class listener_helper
 	*/
 	public function add_hidden_fields(&$event)
 	{
-		$event['s_hidden_fields'] .= build_hidden_fields(array(
+		$hidden_fields = [
 			'attachment_data' 		=> $event['message_parser']->attachment_data,
 			'poll_vote_change'		=> $this->not_empty_or_default($event['post_data']['poll_vote_change'], ' checked="checked"', ''),
 			'poll_title'			=> $this->isset_or_default($event['post_data']['poll_title'], ''),
 			'poll_option_text'		=> $this->not_empty_or_default($event['post_data']['poll_options'], implode("\n", $event['post_data']['poll_options']), ''),
 			'poll_max_options'		=> $this->isset_or_default((int) $event['post_data']['poll_max_options'], 1),
 			'poll_length'			=> $event['post_data']['poll_length'],
-			'attach_sig'			=> $event['post_data']['enable_sig'],
 			'topic_status'			=> $event['post_data']['topic_status'],
-		));
+		];
+
+		if (!empty($event['post_data']['post_edit_locked']))
+		{
+			$hidden_fields['lock_post'] = $event['post_data']['post_edit_locked'];
+		}
+
+		if (!empty($event['post_data']['enable_sig']))
+		{
+			$hidden_fields['attach_sig'] = $event['post_data']['enable_sig'];
+		}
 
 		if (!empty($event['post_data']['topic_status']))
 		{
-			$event['s_hidden_fields'] .= build_hidden_fields(array(
-				'lock_topic'			=> true,
-			));
+			$hidden_fields['lock_topic'] = true;
 		}
+
+		$event['s_hidden_fields'] .= build_hidden_fields($hidden_fields);
 
 		// Add hidden fields for kinerity/topicdescriptions
 		$event['s_hidden_fields'] = $this->add_hidden_if_exists($event['s_hidden_fields'], $event['post_data'], 'topic_desc');

@@ -49,6 +49,8 @@ class check_quickedit_enabled_test extends \marc1706\quickedit\tests\event\liste
 			'forum_id'	=> 1,
 			'topic_data'	=> array(
 				'forum_flags'	=> 128,
+				'forum_status' => ITEM_UNLOCKED,
+				'topic_status' => ITEM_UNLOCKED,
 			),
 		));
 

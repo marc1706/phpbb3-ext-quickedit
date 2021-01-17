@@ -25,6 +25,22 @@ class listener_test_base extends \phpbb_test_case
 	protected $listener;
 
 	static public $hidden_fields = array();
+	/**
+	 * @var \phpbb\template\template|\PHPUnit\Framework\MockObject\MockObject
+	 */
+	protected $template;
+	/**
+	 * @var \phpbb\request\request|\PHPUnit\Framework\MockObject\MockObject
+	 */
+	protected $request;
+	/**
+	 * @var \marc1706\quickedit\event\listener_helper
+	 */
+	protected $helper;
+	/**
+	 * @var \phpbb\config\config
+	 */
+	protected $config;
 
 	public function setup() : void
 	{

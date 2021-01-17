@@ -7,7 +7,7 @@
 *
 */
 
-class initialise_forums_flag_data_test extends \marc\quickedit\tests\event\listener_test_base
+class initialise_forums_flag_data_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
 	public function test_initialise_forums_flag_data()
 	{

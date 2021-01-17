@@ -7,7 +7,7 @@
  *
  */
 
-namespace marc\quickedit\tests\functional;
+namespace marc1706\quickedit\tests\functional;
 
 /**
 * @group functional
@@ -22,14 +22,14 @@ class quickedit_acp_test extends \phpbb_functional_test_case
 	*/
 	static protected function setup_extensions()
 	{
-		return array('marc/quickedit');
+		return array('marc1706/quickedit');
 	}
 
-	public function setUp()
+	public function setUp() : void
 	{
 		parent::setUp();
 
-		$this->add_lang_ext('marc/quickedit', array('quickedit_acp'));
+		$this->add_lang_ext('marc1706/quickedit', array('quickedit_acp'));
 	}
 
 	protected function check_first_forum_settings($key, $value)
@@ -107,7 +107,7 @@ class quickedit_acp_test extends \phpbb_functional_test_case
 
 	protected function run_extension_step($action, $button_text, $expected)
 	{
-		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=' . $action . '&ext_name=marc%2Fquickedit&sid=' . $this->sid);
+		$crawler = self::request('GET', 'adm/index.php?i=acp_extensions&mode=main&action=' . $action . '&ext_name=marc1706%2Fquickedit&sid=' . $this->sid);
 		$form = $crawler->selectButton($button_text)->form();
 		$crawler = self::submit($form);
 		$this->assertContainsLang($expected, $crawler->text());

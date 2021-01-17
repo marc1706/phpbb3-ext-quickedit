@@ -7,7 +7,7 @@
 *
 */
 
-class add_forums_request_data_test extends \marc\quickedit\tests\event\listener_test_base
+class add_forums_request_data_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
 	public function test_add_forums_request_data()
 	{

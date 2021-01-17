@@ -10,20 +10,23 @@ use phpbb\language\language_file_loader;
 *
 */
 
-class quickedit_settings_test extends \marc\quickedit\tests\event\listener_test_base
+class quickedit_settings_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
 	public function test_acp_board_settings()
 	{
 		global $phpbb_root_path, $phpEx, $language;
 
-		$language = $this->getMock('\phpbb\language\language', array('add_lang_ext', 'lang'), array(new language_file_loader($phpbb_root_path, $phpEx)));
+		$language = $this->getMockBuilder('\phpbb\language\language')
+			->setMethods(['add_lang_ext', 'lang'])
+			->setConstructorArgs([new language_file_loader($phpbb_root_path, $phpEx)])
+			->getMock();
 		$language->expects($this->any())
 			->method('lang')
 			->with()
 			->will($this->returnValue('barfoo'));
 
 		$expected_result = 'foobar<br /><br /><input class="button2" type="submit" id="bar_enable" name="bar_enable" value="barfoo" />';
-		$this->assertEquals($expected_result, \marc\quickedit\event\listener::quickedit_settings(true, 'bar'));
+		$this->assertEquals($expected_result, \marc1706\quickedit\event\listener::quickedit_settings(true, 'bar'));
 	}
 }
 

@@ -1,5 +1,6 @@
 <?php
 
+use marc1706\quickedit\tests\event\listener_test_base;
 use phpbb\language\language;
 use phpbb\language\language_file_loader;
 
@@ -11,7 +12,7 @@ use phpbb\language\language_file_loader;
 *
 */
 
-class acp_forums_settings_test extends \marc\quickedit\tests\event\listener_test_base
+class acp_forums_settings_test extends listener_test_base
 {
 	public function setUp()
 	{
@@ -20,7 +21,10 @@ class acp_forums_settings_test extends \marc\quickedit\tests\event\listener_test
 		parent::setUp();
 
 		$this->language = new language(new language_file_loader($phpbb_root_path, $phpEx));
-		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'), array($this->language, '\phpbb\datetime'));
+		$this->user = $this->getMockBuilder('\phpbb\user')
+			->setMethods(['add_lang_ext'])
+			->setConstructorArgs([$this->language, '\phpbb\datetime'])
+			->getMock();
 		$this->setup_listener();
 	}
 

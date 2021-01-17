@@ -7,7 +7,7 @@
 *
 */
 
-class listener_helper_test extends \marc\quickedit\tests\event\listener_test_base
+class listener_helper_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
 	public function test_acp_board_settings()
 	{

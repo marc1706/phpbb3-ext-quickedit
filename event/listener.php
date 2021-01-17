@@ -2,47 +2,54 @@
 /**
 *
 * @package Quickedit
-* @copyright (c) 2015 Marc Alexander ( www.m-a-styles.de )
+* @copyright (c) 2015 - 2021 Marc Alexander ( www.m-a-styles.de )
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
-namespace marc\quickedit\event;
+namespace marc1706\quickedit\event;
 
+use phpbb\config\config;
+use phpbb\json_response;
+use phpbb\language\language;
+use phpbb\request\request;
+use phpbb\request\request_interface;
+use phpbb\template\template;
+use phpbb\template\twig\twig;
+use phpbb\user;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class listener implements EventSubscriberInterface
 {
-	/** @var \phpbb\config\config */
+	/** @var config */
 	protected $config;
 
-	/** @var \marc\quickedit\event\listener_helper */
+	/** @var listener_helper */
 	protected $helper;
 
-	/** @var \phpbb\request\request */
+	/** @var request */
 	protected $request;
 
-	/** @var \phpbb\template\twig\twig */
+	/** @var twig */
 	protected $template;
 
-	/** @var \phpbb\user */
+	/** @var user */
 	protected $user;
 
-	/* @var \phpbb\language\language */
+	/* @var language */
 	protected $language;
 
 	/**
-	* Constructor for listener
-	*
-	* @param \phpbb\config\config 						$config phpBB config
-	* @param \marc\quickedit\event\listener_helper 		$helper Listener helper
-	* @param \phpbb\request\request 					$request phpBB request
-	* @param \phpbb\template\template 					$template phpBB template
-	* @param \phpbb\user 								$user phpBB user
-	* @param \phpbb\language\language					$language
-	* @access public
-	*/
-	public function __construct(\phpbb\config\config $config, \marc\quickedit\event\listener_helper $helper, \phpbb\request\request_interface $request, \phpbb\template\template $template, \phpbb\user $user, \phpbb\language\language $language)
+	 * Constructor for listener
+	 *
+	 * @param config $config phpBB config
+	 * @param listener_helper $helper Listener helper
+	 * @param request_interface $request $request phpBB request
+	 * @param template $template phpBB template
+	 * @param user $user phpBB user
+	 * @param language $language
+	 */
+	public function __construct(config $config, listener_helper $helper, request_interface $request, template $template, user $user, language $language)
 	{
 		$this->config = $config;
 		$this->helper = $helper;
@@ -57,9 +64,8 @@ class listener implements EventSubscriberInterface
 	*
 	* @return array
 	* @static
-	* @access public
 	*/
-	static public function getSubscribedEvents()
+	static public function getSubscribedEvents() : array
 	{
 		return array(
 			'core.posting_modify_template_vars'		=> 'catch_ajax_requests',
@@ -73,13 +79,12 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Check if request is ajax and output quickedit if it is
-	*
-	* @param object $event The event object
-	* @return null
-	* @access public
-	*/
-	public function catch_ajax_requests($event)
+	 * Check if request is ajax and output quickedit if it is
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function catch_ajax_requests($event) : void
 	{
 		// Parse page for quickedit window
 		if ($this->helper->is_catchable_request($event))
@@ -90,10 +95,10 @@ class listener implements EventSubscriberInterface
 			// Update S_HIDDEN_FIELDS in page_data
 			$this->template->assign_vars(array_merge($event['page_data'], array('S_HIDDEN_FIELDS' => $event['s_hidden_fields'])));
 			$this->template->set_filenames(array(
-				'body'	=> '@marc_quickedit/quickedit_body.html'
+				'body'	=> '@marc1706_quickedit/quickedit_body.html'
 			));
 
-			$json = new \phpbb\json_response();
+			$json = new json_response();
 			$json->send(array(
 				'POST_ID'	=> $event['post_id'],
 				'MESSAGE'	=> $this->template->assign_display('body'),
@@ -102,19 +107,18 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Set ACP board settings
-	*
-	* @param object $event The event object
-	* @return null
-	* @access public
-	*/
-	public function acp_board_settings($event)
+	 * Set ACP board settings
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function acp_board_settings($event) : void
 	{
 		if ($event['mode'] == 'features')
 		{
 			$this->helper->modify_acp_display_vars($event);
 
-			$this->language->add_lang('quickedit_acp', 'marc/quickedit');
+			$this->language->add_lang('quickedit_acp', 'marc1706/quickedit');
 
 			if ($this->request->is_set_post('allow_quick_edit_enable'))
 			{
@@ -124,19 +128,18 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Global quick edit enable/disable setting and button to enable in all forums
-	*
-	* @param bool $value Value of quickedit settings. 1 if enabled, 0 if disabled
-	* @param string $key The key of the setting
-	* @return string HTML for quickedit settings
-	* @access public
-	*/
-	static public function quickedit_settings($value, $key)
+	 * Global quick edit enable/disable setting and button to enable in all forums
+	 *
+	 * @param int $value Value of quickedit settings. 1 if enabled, 0 if disabled
+	 * @param string $key The key of the setting
+	 * @return string HTML for quickedit settings
+	 */
+	static public function quickedit_settings(int $value, string $key) : string
 	{
 		// Called statically so can't use $this->language
 		global $language;
 
-		$language->add_lang('quickedit_acp', 'marc/quickedit');
+		$language->add_lang('quickedit_acp', 'marc1706/quickedit');
 
 		$radio_ary = array(1 => 'YES', 0 => 'NO');
 
@@ -145,13 +148,12 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Add quickedit settings to forums request data
-	*
-	* @param object $event The event object
-	* @return null
-	* @access public
-	*/
-	public function add_forums_request_data($event)
+	 * Add quickedit settings to forums request data
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function add_forums_request_data($event) : void
 	{
 		$forum_data = $event['forum_data'];
 		$forum_data += array('enable_quick_edit' => $this->request->variable('enable_quick_edit', false));
@@ -159,13 +161,12 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Add quickedit flag to forums_flag
-	*
-	* @param object $event The event object
-	* @return null
-	* @access public
-	*/
-	public function initialise_forums_flag_data($event)
+	 * Add quickedit flag to forums_flag
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function initialise_forums_flag_data($event) : void
 	{
 		$forum_data = $event['forum_data'];
 		$forum_data['forum_flags'] += ($this->request->variable('enable_quick_edit', false)) ? listener_helper::QUICKEDIT_FLAG : 0;
@@ -173,15 +174,14 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Add quickedit setting to acp_forums settings
-	*
-	* @param object $event The event object
-	* @return null
-	* @access public
-	*/
-	public function acp_forums_settings($event)
+	 * Add quickedit setting to acp_forums settings
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function acp_forums_settings($event) : void
 	{
-		$this->language->add_lang('quickedit_acp', 'marc/quickedit');
+		$this->language->add_lang('quickedit_acp', 'marc1706/quickedit');
 
 		$template_data = $event['template_data'];
 		$template_data['S_ENABLE_QUICK_EDIT'] = ($event['forum_data']['forum_flags'] & listener_helper::QUICKEDIT_FLAG) ? true : false;
@@ -189,13 +189,12 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Update the forum_data_sql with the correct flag before submitting
-	*
-	* @param object $event The event object
-	* @return null
-	* @access public
-	*/
-	public function acp_forums_update_data($event)
+	 * Update the forum_data_sql with the correct flag before submitting
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function acp_forums_update_data($event) : void
 	{
 		$forum_data_sql = $event['forum_data_sql'];
 		$forum_data_sql['forum_flags'] += ($forum_data_sql['enable_quick_edit']) ? listener_helper::QUICKEDIT_FLAG : 0;
@@ -204,13 +203,12 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	* Check if quickedit is enabled and assign S_QUICK_EDIT accordingly
-	*
-	* @param object $event The event object
-	* @return null
-	* @access public
-	*/
-	public function check_quickedit_enabled($event)
+	 * Check if quickedit is enabled and assign S_QUICK_EDIT accordingly
+	 *
+	 * @param object $event The event object
+	 * @return void
+	 */
+	public function check_quickedit_enabled($event) : void
 	{
 		// Check if quick edit is available
 		$s_quick_edit = false;

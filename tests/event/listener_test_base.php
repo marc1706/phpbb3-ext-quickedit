@@ -7,9 +7,9 @@
 *
 */
 
-namespace marc\quickedit\tests\event;
+namespace marc1706\quickedit\tests\event;
 
-use marc\quickedit\event\listener;
+use marc1706\quickedit\event\listener;
 use phpbb\language\language;
 use phpbb\user;
 
@@ -71,14 +71,17 @@ class listener_test_base extends \phpbb_test_case
 
 		if (!isset($this->request))
 		{
-			$this->request = $this->getMock('\phpbb\request\request', array('is_ajax'));
+			$this->request = $this->getMockBuilder('\phpbb\request\request')
+				->disableOriginalConstructor()
+				->setMethods(['is_ajax'])
+				->getMock();
 			$this->request->expects($this->any())
 				->method('is_ajax')
 				->with()
 				->will($this->returnValue(true));
 			$this->request->enable_super_globals();
 		}
-		$this->helper = new \marc\quickedit\event\listener_helper($this->auth, $this->config, $this->request);
+		$this->helper = new \marc1706\quickedit\event\listener_helper($this->auth, $this->config, $this->request);
 
 		$phpbb_extension_manager = $this->getMockBuilder('\phpbb\extensions\manager')
 			->disableOriginalConstructor()
@@ -87,7 +90,7 @@ class listener_test_base extends \phpbb_test_case
 		$phpbb_extension_manager->expects($this->any())
 			->method('get_extension_path')
 			->with($this->anything())
-			->will($this->returnValue('phpBB/ext/marc/quickedit/'));
+			->will($this->returnValue('phpBB/ext/marc1706/quickedit/'));
 
 		$this->listener = new listener(
 			$this->config,

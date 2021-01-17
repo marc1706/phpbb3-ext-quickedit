@@ -7,9 +7,9 @@
 *
 */
 
-namespace marc\quickedit\event;
+namespace marc1706\quickedit\event;
 
-class catch_ajax_requests_test extends \marc\quickedit\tests\event\listener_test_base
+class catch_ajax_requests_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
 	static public $hidden_fields = array();
 

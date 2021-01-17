@@ -13,7 +13,7 @@ use phpbb\language\language_file_loader;
 
 class check_quickedit_enabled_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
-	public function setUp()
+	public function setUp() : void
 	{
 		global $phpbb_root_path, $phpEx;
 

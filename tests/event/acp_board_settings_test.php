@@ -9,7 +9,7 @@
 
 class acp_board_settings_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
-	public function setUp()
+	public function setUp() : void
 	{
 		parent::setUp();
 

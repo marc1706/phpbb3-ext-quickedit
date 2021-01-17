@@ -14,7 +14,7 @@ use phpbb\language\language_file_loader;
 
 class acp_forums_settings_test extends listener_test_base
 {
-	public function setUp()
+	public function setUp() : void
 	{
 		global $phpbb_root_path, $phpEx;
 

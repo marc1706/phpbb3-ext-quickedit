@@ -26,7 +26,7 @@ class listener_test_base extends \phpbb_test_case
 
 	static public $hidden_fields = array();
 
-	public function setup()
+	public function setup() : void
 	{
 		parent::setUp();
 

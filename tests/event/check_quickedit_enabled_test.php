@@ -11,21 +11,26 @@ use phpbb\language\language_file_loader;
 *
 */
 
-class check_quickedit_enabled_test extends \marc\quickedit\tests\event\listener_test_base
+class check_quickedit_enabled_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
-	public function setUp()
+	public function setUp() : void
 	{
 		global $phpbb_root_path, $phpEx;
 
 		parent::setUp();
 
 		$this->language = new language(new language_file_loader($phpbb_root_path, $phpEx));
-		$this->user = $this->getMock('\phpbb\user', array('add_lang_ext'), array($this->language, '\phpbb\datetime'));
+		$this->user = $this->getMockBuilder('\phpbb\user')
+			->setMethods(['add_lang_ext'])
+			->setConstructorArgs([$this->language, '\phpbb\datetime'])
+			->getMock();
 		$this->user->data = array(
 			'is_registered' => true,
 			'user_id'	=> 2,
 		);
-		$this->auth = $this->getMock('\phpbb\auth\auth', array('acl_get'));
+		$this->auth = $this->getMockBuilder('\phpbb\auth\auth')
+			->setMethods(['acl_get'])
+			->getMock();
 		$this->auth->expects($this->any())
 			->method('acl_get')
 			->with($this->anything())
@@ -44,6 +49,8 @@ class check_quickedit_enabled_test extends \marc\quickedit\tests\event\listener_
 			'forum_id'	=> 1,
 			'topic_data'	=> array(
 				'forum_flags'	=> 128,
+				'forum_status' => ITEM_UNLOCKED,
+				'topic_status' => ITEM_UNLOCKED,
 			),
 		));
 

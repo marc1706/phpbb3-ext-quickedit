@@ -7,7 +7,7 @@
 *
 */
 
-namespace marc\quickedit\migrations\v10x;
+namespace marc1706\quickedit\migrations\v10x;
 
 class beta1 extends \phpbb\db\migration\migration
 {

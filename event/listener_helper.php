@@ -2,36 +2,40 @@
 /**
 *
 * @package Quickedit
-* @copyright (c) 2015 Marc Alexander ( www.m-a-styles.de )
+* @copyright (c) 2015 - 2021 Marc Alexander ( www.m-a-styles.de )
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
-namespace marc\quickedit\event;
+namespace marc1706\quickedit\event;
+
+use phpbb\auth\auth;
+use phpbb\config\config;
+use phpbb\request\request;
+use phpbb\request\request_interface;
 
 class listener_helper
 {
-	/** @var \phpbb\auth\auth */
+	/** @var auth */
 	protected $auth;
 
-	/** @var \phpbb\config\config */
+	/** @var config */
 	protected $config;
 
-	/** @var \phpbb\request\request */
+	/** @var request */
 	protected $request;
 
 	/** @var int quickedit forums flag */
 	const QUICKEDIT_FLAG = 128;
 
 	/**
-	* Constructor for listener
-	*
-	* @param \phpbb\auth\auth $auth phpBB auth
-	* @param \phpbb\config\config $config phpBB config
-	* @param \phpbb\request\request $request phpBB request
-	* @access public
-	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\request\request_interface $request)
+	 * Constructor for listener
+	 *
+	 * @param auth $auth phpBB auth
+	 * @param config $config phpBB config
+	 * @param request_interface $request $request phpBB request
+	 */
+	public function __construct(auth $auth, config $config, request_interface $request)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
@@ -43,9 +47,8 @@ class listener_helper
 	*
 	* @param object $event The event object
 	* @return bool True if it's a catchable request, false if not
-	* @access public
 	*/
-	public function is_catchable_request($event)
+	public function is_catchable_request($event) : bool
 	{
 		return $this->request->is_ajax() && !$event['submit'] && $event['mode'] == 'edit';
 	}
@@ -55,8 +58,7 @@ class listener_helper
 	* submission.
 	*
 	* @param object $event The event object
-	* @return null
-	* @access public
+	* @return void
 	*/
 	public function add_hidden_fields(&$event)
 	{
@@ -88,7 +90,6 @@ class listener_helper
 	* @param mixed $value The variable to check
 	* @param mixed $default The default value to use if variable is not set
 	* @return mixed Value if variable is set, default value if not
-	* @access protected
 	*/
 	protected function isset_or_default($value, $default)
 	{
@@ -102,7 +103,6 @@ class listener_helper
 	* @param mixed $value The value if $check_value is not empty
 	* @param mixed $default The default value to use if variable is empty
 	* @return mixed Value if $check_value is not empty, default value if not
-	* @access protected
 	*/
 	protected function not_empty_or_default($check_value, $value, $default)
 	{
@@ -113,8 +113,7 @@ class listener_helper
 	* Enable quick edit
 	*
 	* @param object $event The event object
-	* @return null
-	* @access public
+	* @return void
 	*/
 	public function enable_quick_edit($event)
 	{
@@ -131,8 +130,7 @@ class listener_helper
 	* Add quickedit settings to acp settings by modifying the display vars
 	*
 	* @param object $event The event object
-	* @return null
-	* @access public
+	* @return void
 	*/
 	public function modify_acp_display_vars($event)
 	{
@@ -150,7 +148,7 @@ class listener_helper
 					'lang'		=> 'ALLOW_QUICK_EDIT',
 					'validate'	=> 'bool',
 					'type'		=> 'custom',
-					'function'	=> array('marc\quickedit\event\listener', 'quickedit_settings'),
+					'function'	=> array('marc1706\quickedit\event\listener', 'quickedit_settings'),
 					'explain' 	=> true,
 				);
 			}
@@ -163,9 +161,8 @@ class listener_helper
 	*
 	* @param object $event The event object
 	* @return bool True if user can edit in this topic or forum, else false
-	* @access public
 	*/
-	public function check_topic_edit($event)
+	public function check_topic_edit($event) : bool
 	{
 		if (($event['topic_data']['forum_status'] == ITEM_UNLOCKED && $event['topic_data']['topic_status'] == ITEM_UNLOCKED) || $this->auth->acl_get('m_edit', $event['forum_id']))
 		{
@@ -183,9 +180,8 @@ class listener_helper
 	* @param object $event The event object
 	* @return bool True if quickedit is enabled and user can reply in forum,
 	*		false if not
-	* @access public
 	*/
-	public function check_forum_permissions($event)
+	public function check_forum_permissions($event) : bool
 	{
 		if (($event['topic_data']['forum_flags'] & self::QUICKEDIT_FLAG) && $this->auth->acl_get('f_reply', $event['forum_id']))
 		{
@@ -206,7 +202,7 @@ class listener_helper
 	 *
 	 * @return string Hidden fields data
 	 */
-	protected function add_hidden_if_exists($hidden_fields, $data_array, $column)
+	protected function add_hidden_if_exists(string $hidden_fields, array $data_array, string $column) : string
 	{
 		if (isset($data_array[$column]))
 		{

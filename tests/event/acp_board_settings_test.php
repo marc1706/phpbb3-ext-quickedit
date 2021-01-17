@@ -7,13 +7,16 @@
 *
 */
 
-class acp_board_settings_test extends \marc\quickedit\tests\event\listener_test_base
+class acp_board_settings_test extends \marc1706\quickedit\tests\event\listener_test_base
 {
-	public function setUp()
+	public function setUp() : void
 	{
 		parent::setUp();
 
-		$this->request = $this->getMock('\phpbb\request\request', array('is_ajax', 'is_set_post', 'is_set', 'variable'));
+		$this->request = $this->getMockBuilder('\phpbb\request\request')
+			->disableOriginalConstructor()
+			->setMethods(['is_ajax', 'is_set_post', 'is_set', 'variable'])
+			->getMock();
 		$this->request->expects($this->any())
 			->method('is_ajax')
 			->with()
@@ -59,7 +62,7 @@ class acp_board_settings_test extends \marc\quickedit\tests\event\listener_test_
 			'legend1'		=> 'ACP_BOARD_FEATURES',
 			'allow_privmsg'		=> array('lang' => 'BOARD_PM', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 			'allow_quick_reply'	=> array('lang' => 'ALLOW_QUICK_REPLY', 'validate' => 'bool', 'type' => 'custom', 'method' => 'quick_reply', 'explain' => true),
-			'allow_quick_edit'	=> array('lang' => 'ALLOW_QUICK_EDIT', 'validate' => 'bool', 'type' => 'custom', 'function' => array('marc\quickedit\event\listener', 'quickedit_settings'), 'explain' 	=> true),
+			'allow_quick_edit'	=> array('lang' => 'ALLOW_QUICK_EDIT', 'validate' => 'bool', 'type' => 'custom', 'function' => array('marc1706\quickedit\event\listener', 'quickedit_settings'), 'explain' 	=> true),
 			'legend2'		=> 'ACP_LOAD_SETTINGS',
 			'load_birthdays'	=> array('lang' => 'YES_BIRTHDAYS', 'validate' => 'bool', 'type' => 'radio:yes_no', 'explain' => true),
 		));

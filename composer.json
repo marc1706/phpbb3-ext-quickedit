@@ -5,7 +5,7 @@
 	"homepage": "https://www.m-a-styles.de",
 	"version": "1.1.0",
 	"time": "2021-01-17 22:10:25",
-	"license": "GPL-2.0",
+	"license": "GPL-2.0-only",
 	"authors": [{
 			"name": "Marc Alexander",
 			"email": "admin@m-a-styles.de",

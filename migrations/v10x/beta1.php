@@ -70,7 +70,7 @@ class beta1 extends \phpbb\db\migration\migration
 		{
 			$sql = 'UPDATE ' . FORUMS_TABLE . '
 					SET forum_flags = ' . (($row['forum_flags'] & self::QUICKEDIT_FLAG) ? $row['forum_flags'] - self::QUICKEDIT_FLAG : $row['forum_flags']) . '
-					WHERE forum_id = ' . $row['forum_id'];
+					WHERE forum_id = ' . (int) $row['forum_id'];
 			$this->db->sql_query($sql);
 		}
 		$this->db->sql_freeresult($result);
